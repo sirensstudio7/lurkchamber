@@ -1,4 +1,5 @@
 import type Lenis from "lenis";
+import { isMobileViewport } from "@/lib/mobile-viewport";
 
 type ScrollListener = () => void;
 
@@ -53,5 +54,16 @@ export function scrollToHash(hash: string): void {
     return;
   }
 
-  target.scrollIntoView({ behavior: "smooth", block: "start" });
+  const top =
+    target.getBoundingClientRect().top +
+    window.scrollY +
+    SECTION_SCROLL_OFFSET;
+
+  // Smooth programmatic scroll on iOS often fights the URL bar and jumps the page.
+  window.scrollTo({
+    top: Math.max(0, top),
+    behavior: isMobileViewport() ? "auto" : "smooth",
+  });
+  setAppScrollY(Math.max(0, top));
+  emitAppScroll();
 }

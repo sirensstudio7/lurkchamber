@@ -17,17 +17,13 @@ ScrollTrigger.config({
   ignoreMobileResize: true,
 });
 
-const MOBILE_SCROLL_MEDIA = "(max-width: 767px)";
-
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const isMobileViewport = window.matchMedia(MOBILE_SCROLL_MEDIA).matches;
 
-    // Lenis + ScrollTrigger pin on phones fights the URL bar and causes scroll jumps.
-    if (prefersReducedMotion || isMobileViewport) {
+    if (prefersReducedMotion) {
       setLenisInstance(null);
       const onScroll = () => {
         setAppScrollY(window.scrollY);
@@ -63,12 +59,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
         return lenis.scroll;
       },
       getBoundingClientRect() {
-        const viewport = window.visualViewport;
         return {
           top: 0,
           left: 0,
-          width: viewport?.width ?? window.innerWidth,
-          height: viewport?.height ?? window.innerHeight,
+          width: window.innerWidth,
+          height: window.innerHeight,
         };
       },
     });

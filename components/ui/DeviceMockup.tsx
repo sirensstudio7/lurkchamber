@@ -98,15 +98,6 @@ export function DeviceMockup() {
       viewer.cameraOrbit = `${thetaDeg}deg ${CAMERA_PHI} ${radius}`;
     };
 
-    const onPointerDown = () => {
-      userInteracting = true;
-    };
-
-    const onPointerUp = () => {
-      userInteracting = false;
-      syncThetaFromViewer();
-    };
-
     const onLoad = () => syncThetaFromViewer();
 
     const tick = () => {
@@ -117,19 +108,33 @@ export function DeviceMockup() {
       raf = requestAnimationFrame(tick);
     };
 
-    viewer.addEventListener("pointerdown", onPointerDown);
-    viewer.addEventListener("pointerup", onPointerUp);
-    viewer.addEventListener("pointercancel", onPointerUp);
+    const onPointerDown = () => {
+      userInteracting = true;
+    };
+
+    const onPointerUp = () => {
+      userInteracting = false;
+      syncThetaFromViewer();
+    };
+
     viewer.addEventListener("load", onLoad);
+
+    if (!isMobile) {
+      viewer.addEventListener("pointerdown", onPointerDown);
+      viewer.addEventListener("pointerup", onPointerUp);
+      viewer.addEventListener("pointercancel", onPointerUp);
+    }
 
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
-      viewer.removeEventListener("pointerdown", onPointerDown);
-      viewer.removeEventListener("pointerup", onPointerUp);
-      viewer.removeEventListener("pointercancel", onPointerUp);
       viewer.removeEventListener("load", onLoad);
+      if (!isMobile) {
+        viewer.removeEventListener("pointerdown", onPointerDown);
+        viewer.removeEventListener("pointerup", onPointerUp);
+        viewer.removeEventListener("pointercancel", onPointerUp);
+      }
     };
   }, [showViewer, modelSrc, isMobile]);
 
@@ -154,7 +159,9 @@ export function DeviceMockup() {
             key={`${modelSrc}-${isMobile ? "m" : "d"}`}
             src={modelSrc}
             alt="Retro computer setup"
-            camera-controls
+            {...(isMobile
+              ? { "touch-action": "pan-y" as const }
+              : { "camera-controls": true })}
             disable-zoom
             disable-pan
             overflow-visible

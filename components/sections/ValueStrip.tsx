@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Fragment, useEffect, useRef } from "react";
 import { valueStrip, valueStripDesktopLines } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
+import { isMobileViewport } from "@/lib/mobile-viewport";
 import { ValueStripBento } from "@/components/sections/ValueStripBento";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -39,7 +40,7 @@ export function ValueStrip() {
     const media = section.querySelectorAll<HTMLElement>("[data-value-media]");
     if (!words.length) return;
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || isMobileViewport()) {
       gsap.set(words, { opacity: 1, y: 0 });
       gsap.set(media, { opacity: 1, y: 0 });
       return;

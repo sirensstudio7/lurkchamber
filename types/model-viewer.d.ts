@@ -9,6 +9,7 @@ type ModelViewerAttributes = HTMLAttributes<HTMLElement> & {
   reveal?: "auto" | "interaction" | "manual";
   "auto-rotate"?: boolean;
   "camera-controls"?: boolean;
+  "touch-action"?: "pan-y" | "pan-x" | "none";
   "disable-zoom"?: boolean;
   "disable-pan"?: boolean;
   "camera-orbit"?: string;
