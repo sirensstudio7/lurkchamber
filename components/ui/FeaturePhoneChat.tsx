@@ -32,9 +32,13 @@ export function FeaturePhoneChat({ className }: FeaturePhoneChatProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const [hasStarted, setHasStarted] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(
-    prefersReducedMotion ? messages.length : 0,
-  );
+  const [visibleCount, setVisibleCount] = useState(0);
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setVisibleCount(messages.length);
+    }
+  }, [prefersReducedMotion, messages.length]);
   const [isTyping, setIsTyping] = useState(false);
 
   const scrollToBottom = useCallback(() => {

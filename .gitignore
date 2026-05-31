@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# GLB optimization backups (sources live in public/models/originals/)
+/public/models/originals/
+/public/models/*.opt.glb

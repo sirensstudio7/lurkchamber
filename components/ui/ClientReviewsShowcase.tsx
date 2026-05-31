@@ -7,6 +7,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabelChip } from "@/components/ui/SectionLabelChip";
 import { caseStudies, caseStudiesSection } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
+import { useHydrated } from "@/lib/use-hydrated";
 import "./client-reviews.css";
 
 const MOBILE_MEDIA = "(max-width: 767px)";
@@ -19,11 +20,7 @@ type CarouselSignal = {
 };
 
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia(MOBILE_MEDIA).matches,
-  );
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia(MOBILE_MEDIA);
@@ -166,7 +163,10 @@ function ClientReviewsDesktopRow() {
 
 export function ClientReviewsShowcase() {
   const prefersReducedMotion = useReducedMotion();
+  const hydrated = useHydrated();
   const isMobile = useIsMobile();
+  const showMobileStories = hydrated && isMobile;
+  const showDesktopStories = !hydrated || !isMobile;
 
   return (
     <>
@@ -189,10 +189,10 @@ export function ClientReviewsShowcase() {
           </div>
         </Reveal>
 
-        {!isMobile ? <ClientReviewsDesktopRow /> : null}
+        {showDesktopStories ? <ClientReviewsDesktopRow /> : null}
       </div>
 
-      {isMobile ? (
+      {showMobileStories ? (
         prefersReducedMotion ? (
           <div
             className="client-reviews-carousel__track client-reviews-carousel__track--center"

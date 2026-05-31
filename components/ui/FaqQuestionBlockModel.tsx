@@ -1,11 +1,8 @@
 "use client";
 
-import Script from "next/script";
+import { subscribeModelViewerReady } from "@/components/ui/ModelViewerScript";
 import { useEffect, useRef, useState } from "react";
 import "./faq-question-block.css";
-
-const MODEL_VIEWER_SCRIPT =
-  "https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js";
 
 const MODEL_PATH = "/models/mario_question_block.glb";
 const CAMERA_ORBIT = "0deg 90deg 172%";
@@ -22,9 +19,11 @@ type ModelViewerElement = HTMLElement & {
   cameraOrbit: string;
 };
 
-const DESKTOP_MEDIA = "(min-width: 768px)";
+/** Match FAQ two-column layout (`lg:`) */
+const DESKTOP_MEDIA = "(min-width: 1024px)";
 
 export function FaqQuestionBlockModel() {
+  const [hydrated, setHydrated] = useState(false);
   const [showModel, setShowModel] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [scriptReady, setScriptReady] = useState(false);
@@ -32,6 +31,7 @@ export function FaqQuestionBlockModel() {
   const viewerRef = useRef<ModelViewerElement>(null);
 
   useEffect(() => {
+    setHydrated(true);
     const mq = window.matchMedia(DESKTOP_MEDIA);
     const sync = () => setShowModel(mq.matches);
     sync();
@@ -42,9 +42,7 @@ export function FaqQuestionBlockModel() {
   useEffect(() => {
     if (!showModel) return;
     setMounted(true);
-    if (customElements.get("model-viewer")) {
-      setScriptReady(true);
-    }
+    return subscribeModelViewerReady(() => setScriptReady(true));
   }, [showModel]);
 
   useEffect(() => {
@@ -115,21 +113,11 @@ export function FaqQuestionBlockModel() {
     };
   }, [showViewer]);
 
-  if (!showModel) return null;
+  if (!hydrated || !showModel) return null;
 
   return (
-    <>
-      <Script
-        id="model-viewer-script"
-        type="module"
-        src={MODEL_VIEWER_SCRIPT}
-        strategy="afterInteractive"
-        onReady={() => setScriptReady(true)}
-        onLoad={() => setScriptReady(true)}
-      />
-
-      <div className="faq-question-block" aria-hidden={loadError}>
-        <div className="faq-question-block__stage">
+    <div className="faq-question-block" aria-hidden={loadError}>
+      <div className="faq-question-block__stage">
           {showViewer ? (
             <model-viewer
               ref={viewerRef}
@@ -141,7 +129,7 @@ export function FaqQuestionBlockModel() {
               disable-pan
               overflow-visible
               reveal="auto"
-              shadow-intensity="0.85"
+              shadow-intensity="0.65"
               exposure="1.1"
               loading="lazy"
               interaction-prompt="none"
@@ -150,7 +138,7 @@ export function FaqQuestionBlockModel() {
               min-camera-orbit={MIN_CAMERA_ORBIT}
               max-camera-orbit={MAX_CAMERA_ORBIT}
               field-of-view={FIELD_OF_VIEW}
-              className="faq-question-block__viewer"
+              className="faq-question-block__viewer block h-full w-full"
               style={{ background: "transparent", overflow: "visible" }}
             >
               <div slot="progress-bar" className="hidden" aria-hidden />
@@ -158,8 +146,7 @@ export function FaqQuestionBlockModel() {
           ) : loadError ? null : (
             <div className="faq-question-block__viewer" aria-hidden />
           )}
-        </div>
       </div>
-    </>
+    </div>
   );
 }

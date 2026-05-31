@@ -1,5 +1,4 @@
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { getAppScrollY, getLenisInstance } from "@/lib/lenis-scroll";
+import { refreshScrollTriggersPreservingScroll } from "@/lib/scroll-trigger-refresh";
 
 const RESIZE_DEBOUNCE_MS = 200;
 
@@ -41,14 +40,4 @@ export function onLayoutWidthChange(callback: () => void): () => void {
   };
 }
 
-/** Recalculate ScrollTrigger positions without losing the user's scroll. */
-export function refreshScrollTriggersPreservingScroll(): void {
-  const scrollY = getAppScrollY();
-  ScrollTrigger.refresh();
-  const lenis = getLenisInstance();
-  if (lenis) {
-    lenis.scrollTo(scrollY, { immediate: true });
-  } else {
-    window.scrollTo(0, scrollY);
-  }
-}
+export { refreshScrollTriggersPreservingScroll } from "@/lib/scroll-trigger-refresh";

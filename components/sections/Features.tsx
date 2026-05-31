@@ -10,6 +10,13 @@ import {
   onLayoutWidthChange,
   refreshScrollTriggersPreservingScroll,
 } from "@/lib/scroll-layout";
+import { getAppScrollY } from "@/lib/lenis-scroll";
+import { isMobileViewport } from "@/lib/mobile-viewport";
+import { updateScrollTriggers } from "@/lib/scroll-trigger-refresh";
+
+function readFeaturesScrollY() {
+  return getAppScrollY() || window.scrollY;
+}
 import { FeaturesExpandText } from "@/components/sections/FeaturesExpandText";
 import { CircularLink } from "@/components/ui/CircularLink";
 import { SectionLabelChip } from "@/components/ui/SectionLabelChip";
@@ -150,6 +157,7 @@ export function Features() {
       return;
 
     let cachedHorizontalEndX: number | null = null;
+    let cachedZoomDistance: number | null = null;
 
     const measureHorizontalEndX = () => {
       gsap.set(pinWrap, { x: 0 });
@@ -165,7 +173,12 @@ export function Features() {
     };
 
     const getHorizontalDistance = () => Math.abs(getHorizontalEndX());
-    const getZoomDistance = () => getViewportHeight() * 0.85;
+    const getZoomDistance = () => {
+      if (cachedZoomDistance === null) {
+        cachedZoomDistance = getViewportHeight() * 0.85;
+      }
+      return cachedZoomDistance;
+    };
 
     const getCardBoundsInSection = () => {
       const cardRect = lastCard.getBoundingClientRect();
@@ -215,7 +228,7 @@ export function Features() {
         end: () => `+=${total}`,
         pin: true,
         scrub: true,
-        invalidateOnRefresh: true,
+        invalidateOnRefresh: false,
         anticipatePin: 1,
         onUpdate(self) {
           const progress = self.progress;
@@ -269,17 +282,35 @@ export function Features() {
       });
     }, pinSection);
 
-    const refresh = () => {
+    const refresh = (required = false) => {
       cachedHorizontalEndX = null;
+      cachedZoomDistance = null;
       measureHorizontalEndX();
-      refreshScrollTriggersPreservingScroll();
+      refreshScrollTriggersPreservingScroll({ required });
     };
-    const removeLayoutListener = onLayoutWidthChange(refresh);
-    const refreshTimer = window.setTimeout(refresh, 200);
+    const removeLayoutListener = onLayoutWidthChange(() => refresh(true));
+    let initialRefreshTimer: number | undefined;
+    const scheduleInitialRefresh = () => {
+      if (initialRefreshTimer !== undefined) {
+        window.clearTimeout(initialRefreshTimer);
+      }
+      initialRefreshTimer = window.setTimeout(() => {
+        initialRefreshTimer = undefined;
+        if (readFeaturesScrollY() > 80) return;
+        if (isMobileViewport()) {
+          updateScrollTriggers();
+          return;
+        }
+        refresh(true);
+      }, 600);
+    };
+    scheduleInitialRefresh();
 
     return () => {
       removeLayoutListener();
-      window.clearTimeout(refreshTimer);
+      if (initialRefreshTimer !== undefined) {
+        window.clearTimeout(initialRefreshTimer);
+      }
       pinSection.classList.remove("features-is-zooming");
       ctx.revert();
     };

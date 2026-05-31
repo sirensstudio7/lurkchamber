@@ -10,15 +10,41 @@ import {
   setAppScrollY,
   setLenisInstance,
 } from "@/lib/lenis-scroll";
+import {
+  configureScrollTriggerForViewport,
+  MOBILE_VIEWPORT_MEDIA,
+  preventAggressiveScrollRestoration,
+} from "@/lib/mobile-viewport";
+import {
+  refreshScrollTriggersPreservingScroll,
+  updateScrollTriggers,
+} from "@/lib/scroll-trigger-refresh";
+import { isMobileViewport } from "@/lib/mobile-viewport";
 
 gsap.registerPlugin(ScrollTrigger);
 
-ScrollTrigger.config({
-  ignoreMobileResize: true,
-});
+function getScrollerViewportRect() {
+  const viewport = window.visualViewport;
+  return {
+    top: 0,
+    left: 0,
+    width: viewport?.width ?? window.innerWidth,
+    height: viewport?.height ?? window.innerHeight,
+  };
+}
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    configureScrollTriggerForViewport();
+    preventAggressiveScrollRestoration();
+
+    const mobileMq = window.matchMedia(MOBILE_VIEWPORT_MEDIA);
+    const onViewportModeChange = () => {
+      configureScrollTriggerForViewport();
+      preventAggressiveScrollRestoration();
+    };
+    mobileMq.addEventListener("change", onViewportModeChange);
+
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -27,11 +53,13 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       setLenisInstance(null);
       const onScroll = () => {
         setAppScrollY(window.scrollY);
+        ScrollTrigger.update();
         emitAppScroll();
       };
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
       return () => {
+        mobileMq.removeEventListener("change", onViewportModeChange);
         window.removeEventListener("scroll", onScroll);
         setLenisInstance(null);
       };
@@ -58,14 +86,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
         }
         return lenis.scroll;
       },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
+      getBoundingClientRect: getScrollerViewportRect,
     });
 
     ScrollTrigger.defaults({ scroller: document.documentElement });
@@ -78,10 +99,21 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     gsap.ticker.lagSmoothing(0);
 
     setAppScrollY(lenis.scroll);
-    ScrollTrigger.refresh();
+    refreshScrollTriggersPreservingScroll({ required: true });
     emitAppScroll();
 
+    const visualViewport = window.visualViewport;
+    const onVisualViewportChange = () => {
+      if (!isMobileViewport()) return;
+      updateScrollTriggers();
+    };
+    visualViewport?.addEventListener("resize", onVisualViewportChange);
+    visualViewport?.addEventListener("scroll", onVisualViewportChange);
+
     return () => {
+      visualViewport?.removeEventListener("resize", onVisualViewportChange);
+      visualViewport?.removeEventListener("scroll", onVisualViewportChange);
+      mobileMq.removeEventListener("change", onViewportModeChange);
       gsap.ticker.remove(ticker);
       ScrollTrigger.scrollerProxy(document.documentElement, {});
       ScrollTrigger.defaults({ scroller: window });

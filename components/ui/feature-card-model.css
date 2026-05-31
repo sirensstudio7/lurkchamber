@@ -5,6 +5,12 @@
   margin-inline: auto;
 }
 
+.feature-card-model__placeholder {
+  background-color: var(--hero-bg);
+  opacity: 0.35;
+  border-radius: 1rem;
+}
+
 .feature-card-model--interactive {
   pointer-events: auto;
   touch-action: none;

@@ -7,6 +7,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { valueStrip, valueStripDesktopLines } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
 import { isMobileViewport } from "@/lib/mobile-viewport";
+import { refreshScrollTriggersPreservingScroll } from "@/lib/scroll-trigger-refresh";
 import { ValueStripBento } from "@/components/sections/ValueStripBento";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -93,7 +94,7 @@ export function ValueStrip() {
         },
       });
 
-      ScrollTrigger.refresh();
+      refreshScrollTriggersPreservingScroll({ required: true });
 
       requestAnimationFrame(() => {
         const top = section.getBoundingClientRect().top;

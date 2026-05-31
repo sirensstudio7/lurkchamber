@@ -1,11 +1,9 @@
 "use client";
 
-import Script from "next/script";
+import { subscribeModelViewerReady } from "@/components/ui/ModelViewerScript";
+import { useNearViewport } from "@/lib/use-near-viewport";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./feature-card-model.css";
-
-const MODEL_VIEWER_SCRIPT =
-  "https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js";
 
 export type FeatureCardMotion =
   | "gaze"
@@ -500,6 +498,9 @@ export function FeatureCardModel({
   const [mounted, setMounted] = useState(false);
   const [scriptReady, setScriptReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const { ref: containerRef, near: nearViewport } = useNearViewport({
+    rootMargin: "320px 480px",
+  });
   const viewerRef = useRef<ModelViewerElement>(null);
   const gazeRef = useRef<GazeState | null>(null);
   const yawRef = useRef<YawState | null>(null);
@@ -508,9 +509,7 @@ export function FeatureCardModel({
 
   useEffect(() => {
     setMounted(true);
-    if (customElements.get("model-viewer")) {
-      setScriptReady(true);
-    }
+    return subscribeModelViewerReady(() => setScriptReady(true));
   }, []);
 
   useEffect(() => {
@@ -522,7 +521,7 @@ export function FeatureCardModel({
     return () => viewer.removeEventListener("error", handleError);
   }, [scriptReady, src]);
 
-  const showViewer = mounted && scriptReady && !loadError;
+  const showViewer = mounted && scriptReady && !loadError && nearViewport;
 
   useEffect(() => {
     const viewer = viewerRef.current;
@@ -748,18 +747,9 @@ export function FeatureCardModel({
         : `${profile.maxSwingDeg}deg ${profile.centerPhi + profile.maxPhiSwing}deg 160%`;
 
   return (
-    <>
-      <Script
-        id="model-viewer-script"
-        type="module"
-        src={MODEL_VIEWER_SCRIPT}
-        strategy="afterInteractive"
-        onReady={() => setScriptReady(true)}
-        onLoad={() => setScriptReady(true)}
-      />
-
-      <div
-        className={`feature-card-model${interactive ? " feature-card-model--interactive" : ""}${motion === "float" ? " feature-card-model--float" : ""} ${className}`.trim()}
+    <div
+      ref={containerRef}
+      className={`feature-card-model${interactive ? " feature-card-model--interactive" : ""}${motion === "float" ? " feature-card-model--float" : ""} ${className}`.trim()}
         aria-hidden={loadError}
         title={
           interactive
@@ -778,7 +768,7 @@ export function FeatureCardModel({
             overflow-visible
             loading="lazy"
             reveal="auto"
-            shadow-intensity="0.85"
+            shadow-intensity="0.65"
             exposure="1.1"
             interaction-prompt="none"
             orientation={initialOrientation}
@@ -791,10 +781,9 @@ export function FeatureCardModel({
           >
             <div slot="progress-bar" className="hidden" aria-hidden />
           </model-viewer>
-        ) : loadError ? null : (
-          <div className="h-full w-full" aria-hidden />
+        ) : (
+          <div className="feature-card-model__placeholder h-full w-full" aria-hidden />
         )}
-      </div>
-    </>
+    </div>
   );
 }
