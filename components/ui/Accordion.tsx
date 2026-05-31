@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { playFaqPopSound, preloadFaqPopSound } from "@/lib/playPopSound";
 import "./faq-accordion.css";
 
 type AccordionItem = {
@@ -37,6 +38,15 @@ export function Accordion({ items }: AccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const prefersReducedMotion = useReducedMotion();
 
+  useEffect(() => {
+    preloadFaqPopSound();
+  }, []);
+
+  const handleToggle = (index: number) => {
+    playFaqPopSound();
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
     <div className="faq-accordion">
       {items.map((item, index) => {
@@ -51,7 +61,7 @@ export function Accordion({ items }: AccordionProps) {
               type="button"
               className="faq-accordion__trigger"
               aria-expanded={isOpen}
-              onClick={() => setOpenIndex(isOpen ? null : index)}
+              onClick={() => handleToggle(index)}
             >
               <span className="faq-accordion__question">{item.question}</span>
               <span className="faq-accordion__toggle" aria-hidden>

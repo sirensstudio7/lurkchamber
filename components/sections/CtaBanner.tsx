@@ -17,7 +17,8 @@ export function CtaBanner() {
               <span className="block text-white/50">{ctaBanner.line2}</span>
             </h2>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-white/60 md:text-lg">
-              {ctaBanner.subline}
+              <span className="block">{ctaBanner.sublineLine1}</span>
+              <span className="block">{ctaBanner.sublineLine2}</span>
             </p>
             <a
               href={ctaBanner.cta.href}

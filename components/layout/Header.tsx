@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { header, mobileNav, site } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
 import { getAppScrollY, onAppScroll, scrollToHash } from "@/lib/lenis-scroll";
-import { playPopSound, preloadPopSound } from "@/lib/playPopSound";
+import { playNavPopSound, preloadNavPopSound } from "@/lib/playPopSound";
 import { cn } from "@/lib/utils";
 
 const HERO_ENTER_OFFSET = 100;
@@ -29,7 +29,7 @@ export function Header() {
     if (!href.startsWith("#")) return;
 
     event.preventDefault();
-    playPopSound();
+    playNavPopSound();
     closeMenu();
     scrollToHash(href);
   };
@@ -66,7 +66,7 @@ export function Header() {
   }, [menuOpen]);
 
   useEffect(() => {
-    preloadPopSound();
+    preloadNavPopSound();
   }, []);
 
   useEffect(() => {

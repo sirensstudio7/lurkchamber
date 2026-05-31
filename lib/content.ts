@@ -338,9 +338,10 @@ export const faq = [
 ] as const;
 
 export const ctaBanner = {
-  line1: hero.line1,
-  line2: hero.line2,
-  subline: hero.subline,
+  line1: "Talk first.",
+  line2: "Pixel later.",
+  sublineLine1: "Half-baked idea? Tight timeline?",
+  sublineLine2: "We've shipped from worse. Tell us what you're making.",
   cta: hero.cta,
 } as const;
 
@@ -352,8 +353,8 @@ export const socials = [
 ] as const;
 
 export const footer = {
-  taglineLine1: "Web & brand design,",
-  taglineLine2: "built to launch.",
+  taglineLine1: "You bring the idea.",
+  taglineLine2: "We ship version one.",
   links: [
     { label: "Design Studio", href: "#features" },
     { label: "Stories", href: "#stories" },
