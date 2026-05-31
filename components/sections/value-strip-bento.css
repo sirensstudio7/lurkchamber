@@ -1,0 +1,132 @@
+.value-strip-bento {
+  display: grid;
+  gap: 1rem;
+  grid-auto-rows: 200px;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "cat-tees"
+    "cat-sport"
+    "cat-intimate"
+    "cat-cologne"
+    "cat-kids"
+    "cat-hoodies"
+    "cat-youth"
+    "cat-ladies-shirts"
+    "cat-mens-shirts"
+    "banner";
+}
+
+@media (min-width: 460px) {
+  .value-strip-bento {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "cat-tees cat-tees"
+      "cat-tees cat-tees"
+      "cat-sport cat-sport"
+      "cat-sport cat-sport"
+      "cat-intimate cat-cologne"
+      "cat-kids cat-kids"
+      "cat-kids cat-kids"
+      "cat-hoodies cat-hoodies"
+      "cat-youth cat-youth"
+      "cat-youth cat-youth"
+      "cat-ladies-shirts cat-mens-shirts"
+      "cat-ladies-shirts cat-mens-shirts"
+      "banner banner";
+  }
+}
+
+@media (min-width: 600px) {
+  .value-strip-bento {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 400px 200px 200px 200px 200px 200px 400px;
+    grid-template-areas:
+      "cat-tees cat-tees cat-tees cat-tees"
+      "cat-sport cat-sport cat-kids cat-kids"
+      "cat-hoodies cat-hoodies cat-hoodies cat-hoodies"
+      "cat-youth cat-youth cat-intimate cat-intimate"
+      "cat-youth cat-youth cat-cologne cat-cologne"
+      "banner banner banner banner"
+      "cat-ladies-shirts cat-ladies-shirts cat-mens-shirts cat-mens-shirts";
+  }
+}
+
+@media (min-width: 800px) {
+  .value-strip-bento {
+    grid-auto-rows: 200px;
+    grid-template-rows: repeat(4, 200px);
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      "cat-sport cat-tees cat-tees cat-hoodies"
+      "cat-ladies-shirts cat-tees cat-tees cat-youth"
+      "cat-ladies-shirts cat-kids cat-cologne cat-cologne"
+      "cat-intimate banner banner cat-mens-shirts";
+  }
+}
+
+.value-strip-bento > * {
+  grid-area: var(--grid-area);
+  position: relative;
+  display: block;
+  min-height: 100%;
+  overflow: hidden;
+  border-radius: 24px;
+  text-decoration: none;
+}
+
+.value-strip-bento > a:hover .value-strip-bento__swatch {
+  scale: 1.08;
+  rotate: 2deg;
+}
+
+.value-strip-bento__label {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 2;
+  max-width: 14ch;
+  text-wrap: balance;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.value-strip-bento__label--right {
+  left: auto;
+  right: 0.75rem;
+  text-align: right;
+}
+
+.value-strip-bento__label--dark {
+  color: #0a0a0a;
+}
+
+.value-strip-bento__swatch {
+  display: block;
+  height: 100%;
+  width: 100%;
+  min-height: 100%;
+  border-radius: 24px;
+  background-color: var(--swatch-color);
+  transition:
+    scale 1000ms ease-in-out,
+    rotate 1000ms ease-in-out;
+}
+
+.value-strip-bento__banner {
+  display: block;
+  background: #ffca26;
+  border-radius: 24px;
+  transition: opacity 200ms ease;
+}
+
+.value-strip-bento__banner:hover {
+  opacity: 0.92;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .value-strip-bento > a:hover .value-strip-bento__swatch {
+    scale: 1;
+    rotate: 0deg;
+  }
+}

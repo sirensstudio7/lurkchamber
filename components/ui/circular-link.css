@@ -1,0 +1,87 @@
+.circular-link {
+  display: inline-block;
+  width: 11rem;
+  height: 11rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  word-spacing: 0.3em;
+  color: var(--hero-bg, #c94e1a);
+}
+
+@media (min-width: 640px) {
+  .circular-link {
+    width: 12.5rem;
+    height: 12.5rem;
+    font-size: 0.88rem;
+  }
+}
+
+.circular-link__svg {
+  width: 100%;
+  height: auto;
+  transform-box: fill-box;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 0.05em;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.circular-link__cloud {
+  transform-origin: 50% 50%;
+  animation: circular-link-rotate 60s linear infinite;
+  fill: rgb(201 78 26 / 0.12);
+}
+
+.circular-link__face,
+.circular-link__arrow {
+  transform-origin: 50% 50%;
+  transition: transform 0.15s cubic-bezier(0.32, 0, 0.67, 0);
+}
+
+.circular-link:hover .circular-link__face,
+.circular-link:hover .circular-link__arrow {
+  transform: scale(1.1);
+  transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.circular-link__arrow {
+  stroke-width: 0.14em;
+}
+
+.circular-link__text {
+  transform-origin: 50% 50%;
+  animation: circular-link-rotate-reverse 20s linear infinite;
+}
+
+.circular-link:hover .circular-link__text {
+  animation-play-state: paused;
+}
+
+.circular-link--alt {
+  font-size: 0.65rem;
+  letter-spacing: 0;
+  word-spacing: 0;
+}
+
+@keyframes circular-link-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes circular-link-rotate-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circular-link__text,
+  .circular-link__cloud {
+    animation: none;
+  }
+}

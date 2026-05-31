@@ -1,0 +1,46 @@
+.faq-question-block {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding-bottom: clamp(2.5rem, 8vw, 4.5rem);
+  overflow: visible;
+  pointer-events: auto;
+}
+
+/* Layout height — padding-bottom reserves space for the extended canvas */
+.faq-question-block__stage {
+  position: relative;
+  width: 100%;
+  height: clamp(13rem, 32vw, 19rem);
+  overflow: visible;
+}
+
+/*
+ * Canvas extends past the stage on every side so rotation never hits
+ * the WebGL clip boundary. Parents must stay overflow: visible.
+ */
+.faq-question-block__viewer {
+  position: absolute;
+  top: -10%;
+  right: -8%;
+  bottom: -28%;
+  left: -8%;
+  display: block;
+  width: auto;
+  height: auto;
+  --poster-color: transparent;
+  --progress-bar-color: transparent;
+  background-color: transparent;
+  overflow: visible !important;
+  clip-path: none !important;
+  contain: none !important;
+}
+
+@media (min-width: 768px) {
+  .faq-question-block {
+    margin-top: 0.75rem;
+  }
+
+  .faq-question-block__stage {
+    height: clamp(16rem, 24vw, 22rem);
+  }
+}

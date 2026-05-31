@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f3e8cc;
+  --foreground: #0a0a0a;
+  --muted: #737373;
+  --accent: #0a0a0a;
+  --accent-foreground: #f3e8cc;
+  --surface: #f3e8cc;
+  --border: rgba(10, 10, 10, 0.1);
+  --nav-pill: #f0f0f0;
+  --nav-accent: #18542a;
+  --nav-text: #181d27;
+  --hero-bg: #c94e1a;
+  --hero-foreground: #fccc24;
+  --features-expand-bg: #ffca26;
+  --features-expand-accent: #11872f;
+  --hero-muted: rgba(245, 199, 47, 0.85);
+  --section-padding: clamp(4rem, 10vw, 8rem);
+  --container-max: 87.5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-nav-pill: var(--nav-pill);
+  --color-nav-accent: var(--nav-accent);
+  --color-nav-text: var(--nav-text);
+  --color-hero-bg: var(--hero-bg);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-features-expand: var(--features-expand-bg);
+  --color-features-expand-accent: var(--features-expand-accent);
+  --color-hero-muted: var(--hero-muted);
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-instrument-serif);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.font-display {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+}
+
+.text-hero {
+  font-family: "Tilt Warp", var(--font-tilt-warp), sans-serif !important;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+#hero h1,
+#hero h1 span {
+  font-family: "Tilt Warp", var(--font-tilt-warp), sans-serif !important;
+}
+
+.text-display {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.section-padding {
+  padding-top: var(--section-padding);
+  padding-bottom: var(--section-padding);
+}
+
+.container-wide {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+}
+
+.anchor-offset {
+  scroll-margin-top: 7rem;
+}
+
+/* Last card title/body — hidden as soon as zoom grow starts (Features.tsx) */
+#features .features-is-zooming [data-features-last-card-text],
+#features .features-is-zooming [data-features-last-card-text] * {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#features .features-is-zooming [data-features-last-card] {
+  color: transparent !important;
+}
+
+/* Orange fill + corner radius live on .hero-section-bg (see Hero.tsx) so 3D is not clipped */
+#hero.hero-section {
+  min-height: 100dvh;
+  background-color: transparent !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+
+#hero .hero-content {
+  background-color: transparent !important;
+  overflow: visible !important;
+}
+
+#hero .hero-mockup {
+  overflow: visible;
+}
+
+#hero,
+#hero .hero-content {
+  color: var(--hero-foreground);
+}
+
+/* Hide model-viewer default top loading bar (black/gray line on refresh) */
+model-viewer::part(default-progress-bar) {
+  display: none;
+}
+
+#hero model-viewer {
+  --poster-color: var(--hero-bg);
+  --progress-bar-color: transparent;
+  background-color: transparent;
+  overflow: visible !important;
+}
+
+#features .feature-card-model model-viewer {
+  --poster-color: transparent;
+  --progress-bar-color: transparent;
+  background-color: transparent;
+  overflow: visible !important;
+}
+
+#faq,
+#faq .container-wide,
+#faq .faq-question-block,
+#faq .faq-question-block__stage,
+#faq model-viewer {
+  overflow: visible !important;
+}
+
+#faq model-viewer {
+  --poster-color: transparent;
+  --progress-bar-color: transparent;
+  background-color: transparent;
+  clip-path: none !important;
+}
+
+@media (max-width: 767px) {
+  #hero model-viewer {
+    /* Taller canvas so the retro setup isn’t clipped on small screens */
+    min-height: 300px;
+    height: min(38dvh, 340px);
+  }
+
+  #hero .hero-mockup {
+    flex-shrink: 0;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+.cta-banner-card {
+  background-color: #000;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.14) 4px,
+    transparent 4px
+  );
+  background-size: 40px 40px;
+}

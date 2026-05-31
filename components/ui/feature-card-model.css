@@ -1,0 +1,52 @@
+.feature-card-model {
+  pointer-events: none;
+  min-height: 0;
+  overflow: visible;
+  margin-inline: auto;
+}
+
+.feature-card-model--interactive {
+  pointer-events: auto;
+  touch-action: none;
+  overscroll-behavior: contain;
+  user-select: none;
+}
+
+.feature-card-model--interactive .feature-card-model__viewer {
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.feature-card-model--interactive .feature-card-model__viewer:active {
+  cursor: grabbing;
+}
+
+.feature-card-model__viewer {
+  --poster-color: transparent;
+  --progress-bar-color: transparent;
+  background-color: transparent;
+  overflow: visible !important;
+}
+
+.feature-card-model--float {
+  animation: feature-card-float 3.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes feature-card-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-card-model--float {
+    animation: none;
+  }
+}
