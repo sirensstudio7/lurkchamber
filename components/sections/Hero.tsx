@@ -77,15 +77,25 @@ export function Hero() {
       {/* Spacer for fixed header (pill ~60–68px + top padding) */}
       <div className="h-[76px] shrink-0 md:h-[88px]" aria-hidden />
       <div
-        className="hero-content container-wide relative flex min-h-0 flex-1 flex-col justify-end gap-3 overflow-visible bg-transparent pb-6 pt-0 md:justify-start md:gap-0 md:pb-0 md:pt-4"
+        className="hero-content container-wide relative flex min-h-0 flex-1 flex-col overflow-visible bg-transparent pt-0 md:pt-4"
         style={{ color: HERO_TEXT, backgroundColor: "transparent" }}
       >
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="relative z-30 mx-auto w-full max-w-2xl text-center"
-        >
+        <div className="hero-main mb-[72px] mt-6 flex w-full flex-col items-center gap-8 md:mt-auto md:gap-0">
+          <motion.div
+            variants={item}
+            initial="hidden"
+            animate="show"
+            className="hero-mockup relative z-10 w-full shrink-0 overflow-visible md:pt-2"
+          >
+            <DeviceMockup />
+          </motion.div>
+
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="relative z-30 mx-auto w-full max-w-2xl text-center md:-mt-10"
+          >
           <motion.h1
             variants={item}
             className={`${tiltWarp.className} text-hero`}
@@ -141,14 +151,8 @@ export function Hero() {
               </svg>
             </a>
           </motion.div>
-        </motion.div>
-
-        <motion.div
-          variants={item}
-          className="hero-mockup relative z-10 w-full shrink-0 overflow-visible pb-4 md:mt-auto md:pb-0 md:pt-4"
-        >
-          <DeviceMockup />
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

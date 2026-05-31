@@ -11,7 +11,8 @@ export type FeatureCardMotion =
   | "inspect"
   | "scan"
   | "float"
-  | "static";
+  | "static"
+  | "swayZ";
 
 type MotionProfile = {
   centerPhi: number;
@@ -24,7 +25,7 @@ type MotionProfile = {
   /** Timing scale for glances — lower = faster, more alert motion */
   pace?: number;
   /** Camera orbit drift vs spinning the model on Y */
-  mode: "camera" | "modelY" | "scan" | "float" | "static";
+  mode: "camera" | "modelY" | "scan" | "float" | "static" | "swayZ";
 };
 
 const MOTION_PROFILES: Record<FeatureCardMotion, MotionProfile> = {
@@ -83,6 +84,15 @@ const MOTION_PROFILES: Record<FeatureCardMotion, MotionProfile> = {
     reach: 0,
     mode: "static",
   },
+  swayZ: {
+    centerPhi: 90,
+    cameraRadius: "135%",
+    maxSwingDeg: 5,
+    maxPhiSwing: 0,
+    fieldOfView: "30deg",
+    reach: 0,
+    mode: "swayZ",
+  },
 };
 
 type FeatureCardModelProps = {
@@ -100,6 +110,10 @@ type FeatureCardModelProps = {
   spinAxis?: "y" | "z";
   /** Drag to orbit the model — disables idle animation */
   interactive?: boolean;
+  /** model-viewer shadow-intensity — set to "0" to disable */
+  shadowIntensity?: string;
+  /** Reverse Z sway direction — for mirrored pairs */
+  swayReverse?: boolean;
 };
 
 function formatOrientation(
@@ -488,6 +502,8 @@ export function FeatureCardModel({
   cameraRadius,
   spinAxis = "y",
   interactive = false,
+  shadowIntensity = "0.65",
+  swayReverse = false,
 }: FeatureCardModelProps) {
   const profile = MOTION_PROFILES[motion];
   const orbitRadius = cameraRadius ?? profile.cameraRadius;
@@ -631,6 +647,7 @@ export function FeatureCardModel({
     scanRef.current = null;
     let raf = 0;
     const fixedOrbit = `${cameraTheta}deg ${profile.centerPhi}deg ${orbitRadius}`;
+    const swayDirection = swayReverse ? -1 : 1;
 
     const tick = (now: number) => {
       if (!viewer.loaded) {
@@ -638,7 +655,12 @@ export function FeatureCardModel({
         return;
       }
 
-      if (profile.mode === "modelY") {
+      if (profile.mode === "swayZ") {
+        const swing =
+          profile.maxSwingDeg * Math.sin(now * 0.0015 * swayDirection);
+        viewer.cameraOrbit = fixedOrbit;
+        viewer.orientation = formatOrientation(baseOrientation, swing, "z");
+      } else if (profile.mode === "modelY") {
         if (!yawRef.current?.initialized) {
           yawRef.current = yawController.initYaw(now);
         }
@@ -693,6 +715,7 @@ export function FeatureCardModel({
     orbitRadius,
     spinAxis,
     interactive,
+    swayReverse,
   ]);
 
   useEffect(() => {
@@ -734,13 +757,13 @@ export function FeatureCardModel({
   const initialOrbit = `${cameraTheta}deg ${profile.centerPhi}deg ${orbitRadius}`;
   const initialOrientation = formatOrientation(baseOrientation);
   const minOrbit =
-    interactive || profile.mode === "static" || profile.mode === "float"
+    interactive || profile.mode === "static" || profile.mode === "float" || profile.mode === "swayZ"
       ? initialOrbit
       : profile.mode === "modelY"
         ? `auto ${profile.centerPhi - profile.maxPhiSwing}deg 105%`
         : `-${profile.maxSwingDeg}deg ${profile.centerPhi - profile.maxPhiSwing}deg 105%`;
   const maxOrbit =
-    interactive || profile.mode === "static" || profile.mode === "float"
+    interactive || profile.mode === "static" || profile.mode === "float" || profile.mode === "swayZ"
       ? initialOrbit
       : profile.mode === "modelY"
         ? `auto ${profile.centerPhi + profile.maxPhiSwing}deg 160%`
@@ -768,7 +791,7 @@ export function FeatureCardModel({
             overflow-visible
             loading="lazy"
             reveal="auto"
-            shadow-intensity="0.65"
+            shadow-intensity={shadowIntensity}
             exposure="1.1"
             interaction-prompt="none"
             orientation={initialOrientation}
