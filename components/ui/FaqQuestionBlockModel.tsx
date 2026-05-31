@@ -22,18 +22,30 @@ type ModelViewerElement = HTMLElement & {
   cameraOrbit: string;
 };
 
+const DESKTOP_MEDIA = "(min-width: 768px)";
+
 export function FaqQuestionBlockModel() {
+  const [showModel, setShowModel] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [scriptReady, setScriptReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const viewerRef = useRef<ModelViewerElement>(null);
 
   useEffect(() => {
+    const mq = window.matchMedia(DESKTOP_MEDIA);
+    const sync = () => setShowModel(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!showModel) return;
     setMounted(true);
     if (customElements.get("model-viewer")) {
       setScriptReady(true);
     }
-  }, []);
+  }, [showModel]);
 
   useEffect(() => {
     const viewer = viewerRef.current;
@@ -102,6 +114,8 @@ export function FaqQuestionBlockModel() {
       viewer.removeEventListener("load", onLoad);
     };
   }, [showViewer]);
+
+  if (!showModel) return null;
 
   return (
     <>

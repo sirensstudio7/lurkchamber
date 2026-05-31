@@ -62,15 +62,10 @@
   color: var(--features-expand-accent, #11872f);
 }
 
-@media (max-width: 639px) {
+@media (max-width: 767px) {
   .features-expand-bottom {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .features-expand-circular {
-    align-self: flex-end;
-    margin-left: 0;
   }
 }
 

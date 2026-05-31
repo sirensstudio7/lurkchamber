@@ -69,9 +69,14 @@ export const clients = {
 } as const;
 
 export const valueStrip = [
-  "Finding the right",
-  "developer partner takes months.",
-  "Starting with us takes days.",
+  "The right fit",
+  "takes months.",
+  "We take days.",
+] as const;
+
+export const valueStripDesktopLines = [
+  "The right fit takes months.",
+  "We take days.",
 ] as const;
 
 export const valueStripBento = [
@@ -145,6 +150,10 @@ export const featuresSection = {
   titleLine1: "You bring the rough version.",
   titleLine2: "We take it",
   titleLine3: "to launch.",
+  titleMobileLine1: "You bring the",
+  titleMobileLine2: "rough version.",
+  titleMobileLine3: "We take it",
+  titleMobileLine4: "to launch.",
 } as const;
 
 export const featuresExpandAbout = {
@@ -223,12 +232,18 @@ export const features = [
     title: "Launch isn't goodbye",
     description:
       "Once it's live, we fix what breaks, adjust what feels wrong, and grow it when you're ready for more.",
+    model: {
+      src: "/models/house_palm_plant.glb",
+      motion: "float",
+      cameraRadius: "125%",
+    },
   },
 ] as const;
 
 export const caseStudiesSection = {
   label: "Stories",
   title: "Stories of our partners",
+  intro: "What founders and teams say after we ship together.",
 } as const;
 
 export const caseStudies = [

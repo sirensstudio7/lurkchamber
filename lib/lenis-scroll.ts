@@ -32,6 +32,10 @@ export function setLenisInstance(instance: Lenis | null): void {
   lenisInstance = instance;
 }
 
+export function getLenisInstance(): Lenis | null {
+  return lenisInstance;
+}
+
 /** Smooth scroll to an in-page section (`#features`, etc.). */
 export function scrollToHash(hash: string): void {
   const id = hash.startsWith("#") ? hash.slice(1) : hash;

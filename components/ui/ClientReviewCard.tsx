@@ -71,7 +71,7 @@ export function ClientReviewCard({
           src={image}
           alt=""
           fill
-          sizes="(max-width: 768px) 85vw, 340px"
+          sizes="(max-width: 767px) calc(100vw - 3rem), 340px"
           className="client-review-card__image"
         />
         <div className="client-review-card__media-overlay" aria-hidden />

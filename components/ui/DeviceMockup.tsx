@@ -16,6 +16,13 @@ const MIN_CAMERA_ORBIT = "auto 72deg 68%";
 const MAX_CAMERA_ORBIT = "auto 72deg 68%";
 const CAMERA_PHI = "72deg";
 const CAMERA_RADIUS = "68%";
+const MOBILE_MEDIA = "(max-width: 767px)";
+/** Zoomed out on small screens so the desk/shadow isn’t clipped by the canvas */
+const MOBILE_CAMERA_ORBIT = "0deg 72deg 92%";
+const MOBILE_MIN_CAMERA_ORBIT = "auto 72deg 92%";
+const MOBILE_MAX_CAMERA_ORBIT = "auto 72deg 92%";
+const MOBILE_CAMERA_RADIUS = "92%";
+const MOBILE_CAMERA_TARGET = "0m 0.08m 0m";
 /** ~3.6°/s at 60fps, counter-clockwise */
 const ROTATION_SPEED = 0.06;
 
@@ -28,9 +35,18 @@ type ModelViewerElement = HTMLElement & {
 export function DeviceMockup() {
   const [mounted, setMounted] = useState(false);
   const [scriptReady, setScriptReady] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [modelSrc, setModelSrc] = useState(MODEL_PATH);
   const [loadError, setLoadError] = useState(false);
   const viewerRef = useRef<ModelViewerElement>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_MEDIA);
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -76,8 +92,10 @@ export function DeviceMockup() {
       }
     };
 
+    const radius = isMobile ? MOBILE_CAMERA_RADIUS : CAMERA_RADIUS;
+
     const applyOrbit = () => {
-      viewer.cameraOrbit = `${thetaDeg}deg ${CAMERA_PHI} ${CAMERA_RADIUS}`;
+      viewer.cameraOrbit = `${thetaDeg}deg ${CAMERA_PHI} ${radius}`;
     };
 
     const onPointerDown = () => {
@@ -113,7 +131,7 @@ export function DeviceMockup() {
       viewer.removeEventListener("pointercancel", onPointerUp);
       viewer.removeEventListener("load", onLoad);
     };
-  }, [showViewer, modelSrc]);
+  }, [showViewer, modelSrc, isMobile]);
 
   return (
     <>
@@ -127,13 +145,13 @@ export function DeviceMockup() {
       />
 
       <div
-        className="relative z-10 -mt-2 min-h-[300px] w-full overflow-visible md:-mt-12 md:min-h-0"
+        className="relative z-10 -mt-2 min-h-[340px] w-full overflow-visible pb-2 md:-mt-12 md:min-h-0 md:pb-0"
         aria-label="Retro computer 3D model"
       >
         {showViewer ? (
           <model-viewer
             ref={viewerRef}
-            key={modelSrc}
+            key={`${modelSrc}-${isMobile ? "m" : "d"}`}
             src={modelSrc}
             alt="Retro computer setup"
             camera-controls
@@ -145,10 +163,15 @@ export function DeviceMockup() {
             exposure="1.25"
             loading="eager"
             interaction-prompt="none"
-            camera-orbit={CAMERA_ORBIT}
-            min-camera-orbit={MIN_CAMERA_ORBIT}
-            max-camera-orbit={MAX_CAMERA_ORBIT}
-            className="block h-[min(38dvh,340px)] min-h-[300px] w-full sm:h-[320px] md:h-[440px] md:min-h-0"
+            camera-orbit={isMobile ? MOBILE_CAMERA_ORBIT : CAMERA_ORBIT}
+            {...(isMobile ? { "camera-target": MOBILE_CAMERA_TARGET } : {})}
+            min-camera-orbit={
+              isMobile ? MOBILE_MIN_CAMERA_ORBIT : MIN_CAMERA_ORBIT
+            }
+            max-camera-orbit={
+              isMobile ? MOBILE_MAX_CAMERA_ORBIT : MAX_CAMERA_ORBIT
+            }
+            className="block h-[min(50dvh,400px)] min-h-[340px] w-full sm:h-[360px] md:h-[440px] md:min-h-0"
             style={{
               background: "transparent",
               overflow: "visible",

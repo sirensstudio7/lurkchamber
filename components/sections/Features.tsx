@@ -6,8 +6,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
 import { features, featuresExpandAbout, featuresSection } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
+import {
+  onLayoutWidthChange,
+  refreshScrollTriggersPreservingScroll,
+} from "@/lib/scroll-layout";
 import { FeaturesExpandText } from "@/components/sections/FeaturesExpandText";
 import { CircularLink } from "@/components/ui/CircularLink";
+import { SectionLabelChip } from "@/components/ui/SectionLabelChip";
 import { FeatureCardModel } from "@/components/ui/FeatureCardModel";
 import { FeatureFallingBlocks } from "@/components/ui/FeatureFallingBlocks";
 import { FeaturePhoneChat } from "@/components/ui/FeaturePhoneChat";
@@ -24,12 +29,24 @@ function getViewportHeight() {
 
 function FeaturesSectionTitle() {
   return (
-    <h2 className={`${tiltWarp.className} text-hero max-w-xl`}>
-      <span className="block md:inline">{featuresSection.titleLine1}</span>
+    <h2
+      className={`${tiltWarp.className} w-full max-w-full text-[clamp(2.4rem,11.25vw,3.15rem)] leading-[1.1] tracking-[-0.02em] md:max-w-xl md:text-hero md:leading-[1.05]`}
+    >
+      <span className="block md:hidden">{featuresSection.titleMobileLine1}</span>
+      <span className="block md:hidden">{featuresSection.titleMobileLine2}</span>
+      <span className="block md:hidden">{featuresSection.titleMobileLine3}</span>
+      <span className="block md:hidden">{featuresSection.titleMobileLine4}</span>
+      <span className="hidden break-words md:inline">
+        {featuresSection.titleLine1}
+      </span>
       <span className="hidden md:inline"> </span>
-      <span className="block md:inline">{featuresSection.titleLine2}</span>
+      <span className="hidden break-words md:inline">
+        {featuresSection.titleLine2}
+      </span>
       <span className="hidden md:inline"> </span>
-      <span className="block md:inline">{featuresSection.titleLine3}</span>
+      <span className="hidden break-words md:inline">
+        {featuresSection.titleLine3}
+      </span>
     </h2>
   );
 }
@@ -255,13 +272,13 @@ export function Features() {
     const refresh = () => {
       cachedHorizontalEndX = null;
       measureHorizontalEndX();
-      ScrollTrigger.refresh();
+      refreshScrollTriggersPreservingScroll();
     };
-    window.addEventListener("resize", refresh);
+    const removeLayoutListener = onLayoutWidthChange(refresh);
     const refreshTimer = window.setTimeout(refresh, 200);
 
     return () => {
-      window.removeEventListener("resize", refresh);
+      removeLayoutListener();
       window.clearTimeout(refreshTimer);
       pinSection.classList.remove("features-is-zooming");
       ctx.revert();
@@ -273,9 +290,7 @@ export function Features() {
       <section id="features" className="anchor-offset section-padding">
         <div className="container-wide">
           <div className="mb-12 md:mb-16">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-muted">
-              {featuresSection.label}
-            </p>
+            <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>
             <FeaturesSectionTitle />
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -317,10 +332,8 @@ export function Features() {
           ref={pinWrapRef}
           className="flex h-full w-max items-center gap-4 pr-8 will-change-transform"
         >
-          <div className="flex min-h-full min-w-[min(88vw,520px)] shrink-0 flex-col justify-center px-[max(1.25rem,5vw)] md:min-w-[min(70vw,640px)]">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-muted">
-              {featuresSection.label}
-            </p>
+          <div className="box-border flex min-h-full w-[88vw] max-w-[88vw] min-w-0 shrink-0 flex-col justify-center px-[max(1.25rem,5vw)] md:w-auto md:max-w-none md:min-w-[min(70vw,640px)]">
+            <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>
             <FeaturesSectionTitle />
           </div>
 
@@ -378,7 +391,7 @@ export function Features() {
               className="shrink-0 will-change-transform"
             >
               <h2
-                className={`${tiltWarp.className} max-w-2xl text-features-expand-accent text-[clamp(1.35rem,4vw,2.75rem)] leading-[1.08]`}
+                className={`${tiltWarp.className} max-w-2xl text-features-expand-accent text-[clamp(2.125rem,9vw,3rem)] leading-[1.06] md:text-[clamp(1.35rem,4vw,2.75rem)] md:leading-[1.08]`}
               >
                 <span className="block">{featuresExpandAbout.titleLine1}</span>
                 <span className="block">{featuresExpandAbout.titleLine2}</span>
@@ -394,7 +407,7 @@ export function Features() {
               </div>
               <div
                 data-features-expand-circular
-                className="features-expand-circular shrink-0 will-change-transform"
+                className="features-expand-circular hidden shrink-0 will-change-transform md:block"
               >
                 <CircularLink
                   text={featuresExpandAbout.circularText}
