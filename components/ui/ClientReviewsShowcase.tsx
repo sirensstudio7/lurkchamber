@@ -13,6 +13,11 @@ const MOBILE_MEDIA = "(max-width: 767px)";
 const MOBILE_DWELL_MS = 5000;
 const SCROLL_SETTLE_MS = 650;
 
+type CarouselSignal = {
+  cancelled: boolean;
+  timeouts: number[];
+};
+
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(
     () =>
@@ -42,7 +47,7 @@ function scrollCardToCenter(track: HTMLElement, card: HTMLElement) {
   });
 }
 
-function wait(ms: number, signal: { cancelled: boolean }) {
+function wait(ms: number, signal: CarouselSignal) {
   return new Promise<void>((resolve) => {
     const id = window.setTimeout(() => {
       if (!signal.cancelled) resolve();
@@ -51,7 +56,7 @@ function wait(ms: number, signal: { cancelled: boolean }) {
   });
 }
 
-function waitForScrollEnd(track: HTMLElement, signal: { cancelled: boolean }) {
+function waitForScrollEnd(track: HTMLElement, signal: CarouselSignal) {
   return new Promise<void>((resolve) => {
     let settled = false;
     const done = () => {
