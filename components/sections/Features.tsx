@@ -10,6 +10,7 @@ import {
   onLayoutWidthChange,
   refreshScrollTriggersPreservingScroll,
 } from "@/lib/scroll-layout";
+import { useMinWidth } from "@/lib/use-media-query";
 import { FeaturesExpandText } from "@/components/sections/FeaturesExpandText";
 import { CircularLink } from "@/components/ui/CircularLink";
 import { SectionLabelChip } from "@/components/ui/SectionLabelChip";
@@ -126,6 +127,8 @@ export function Features() {
   const expandHeaderRef = useRef<HTMLDivElement>(null);
   const expandTextRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const isMdUp = useMinWidth(768);
+  const enablePinnedScroll = isMdUp && !prefersReducedMotion;
 
   useEffect(() => {
     const pinSection = pinSectionRef.current;
@@ -145,7 +148,7 @@ export function Features() {
       !expandPanel ||
       !expandHeader ||
       !expandText ||
-      prefersReducedMotion
+      !enablePinnedScroll
     )
       return;
 
@@ -283,9 +286,9 @@ export function Features() {
       pinSection.classList.remove("features-is-zooming");
       ctx.revert();
     };
-  }, [prefersReducedMotion]);
+  }, [enablePinnedScroll]);
 
-  if (prefersReducedMotion) {
+  if (!enablePinnedScroll) {
     return (
       <section id="features" className="anchor-offset section-padding">
         <div className="container-wide">
