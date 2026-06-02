@@ -10,7 +10,7 @@ export function CtaBanner() {
       className="anchor-offset bg-surface pt-[var(--section-padding)]"
     >
       <div className="container-wide">
-        <div className="cta-banner-card relative flex min-h-[min(70dvh,680px)] flex-col items-center justify-center overflow-hidden rounded-3xl p-8">
+        <div className="cta-banner-card relative flex min-h-[min(70dvh,680px)] flex-col items-center justify-center overflow-hidden rounded-3xl bg-[#0072b8] p-8">
           <Reveal className="relative z-10 flex w-full flex-col items-center text-center">
             <h2 className="text-hero text-white">
               <span className="block">{ctaBanner.line1}</span>
