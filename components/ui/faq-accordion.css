@@ -63,6 +63,12 @@
     color 0.25s ease;
 }
 
+.faq-accordion__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .faq-accordion__item--open .faq-accordion__toggle {
   background: var(--features-expand-bg);
   color: var(--hero-bg);

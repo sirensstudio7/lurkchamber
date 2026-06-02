@@ -13,16 +13,14 @@ export function WorkHighlightFrame({ src, alt }: WorkHighlightFrameProps) {
   const showImage = Boolean(src) && !imageFailed;
 
   return (
-    <div
-      className="work-highlight-frame relative aspect-[16/10] w-full overflow-hidden rounded-3xl bg-white ring-1 ring-inset ring-foreground/10"
-    >
+    <div className="work-highlight-frame relative aspect-[16/10] w-full overflow-hidden rounded-3xl bg-white shadow-[inset_0_0_0_1px_rgba(10,10,10,0.1)]">
       {showImage ? (
         <Image
           src={src!}
           alt={alt}
           fill
           sizes="(max-width: 767px) 85vw, 50vw"
-          className="object-cover object-top"
+          className="rounded-[inherit] object-cover object-top"
           onError={() => setImageFailed(true)}
         />
       ) : null}

@@ -135,18 +135,22 @@ function WorkHighlightsMarquee() {
       track.style.transform = `translate3d(${px}px, 0, 0)`;
     };
 
+    const getSlideVisualCenter = (slide: HTMLElement) => {
+      const frame = slide.querySelector<HTMLElement>(".work-highlight-frame");
+      const target = frame ?? slide;
+      const rect = target.getBoundingClientRect();
+      return rect.left + rect.width / 2;
+    };
+
     const getTargetTranslate = (index: number) => {
       const slides = getSlides();
       const slide = slides[index];
       if (!slide) return translate;
 
       const viewportCenter = window.innerWidth / 2;
-      const trackRect = track.getBoundingClientRect();
-      const baseTrackLeft = trackRect.left - translate;
-      const slideCenter =
-        baseTrackLeft + slide.offsetLeft + slide.offsetWidth / 2;
+      const visualCenter = getSlideVisualCenter(slide);
 
-      return viewportCenter - slideCenter;
+      return translate + (viewportCenter - visualCenter);
     };
 
     const setActiveDom = (index: number) => {
@@ -227,9 +231,7 @@ function WorkHighlightsMarquee() {
         const slide = getSlides()[active];
         if (slide) {
           const viewportCenter = window.innerWidth / 2;
-          const frame = slide.querySelector<HTMLElement>(".work-highlight-frame");
-          const rect = (frame ?? slide).getBoundingClientRect();
-          const visualCenter = rect.left + rect.width / 2;
+          const visualCenter = getSlideVisualCenter(slide);
           applyTranslate(translate + (viewportCenter - visualCenter));
           return;
         }

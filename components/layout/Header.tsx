@@ -11,8 +11,36 @@ const HERO_ENTER_OFFSET = 100;
 const HERO_EXIT_OFFSET = 160;
 const NAV_THEME_TRANSITION =
   "transition-colors duration-500 ease-in-out motion-reduce:duration-150";
-const NAV_ICON_TRANSITION =
-  "transition-[background-color,transform,opacity] duration-500 ease-in-out motion-reduce:duration-150";
+const NAV_ICON_MORPH =
+  "transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none motion-reduce:duration-150";
+
+function MenuToggleIcon({ open }: { open: boolean }) {
+  return (
+    <span className="relative block h-[18px] w-[22px]" aria-hidden>
+      <span
+        className={cn(
+          "absolute left-0 h-[2.5px] w-full origin-center rounded-full bg-current",
+          NAV_ICON_MORPH,
+          open ? "top-[7.75px] rotate-45" : "top-0 rotate-0",
+        )}
+      />
+      <span
+        className={cn(
+          "absolute left-0 top-[7.75px] h-[2.5px] w-full origin-center rounded-full bg-current",
+          NAV_ICON_MORPH,
+          open ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
+        )}
+      />
+      <span
+        className={cn(
+          "absolute left-0 h-[2.5px] w-full origin-center rounded-full bg-current",
+          NAV_ICON_MORPH,
+          open ? "top-[7.75px] -rotate-45" : "top-[15.5px] rotate-0",
+        )}
+      />
+    </span>
+  );
+}
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -186,56 +214,7 @@ export function Header() {
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden
-              className="overflow-visible"
-            >
-              <line
-                x1="4"
-                y1="7"
-                x2="20"
-                y2="7"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                style={{ transformOrigin: "12px 12px" }}
-                className={cn(
-                  NAV_ICON_TRANSITION,
-                  menuOpen && "translate-y-[5px] rotate-45",
-                )}
-              />
-              <line
-                x1="4"
-                y1="12"
-                x2="20"
-                y2="12"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                className={cn(
-                  NAV_ICON_TRANSITION,
-                  menuOpen && "scale-x-0 opacity-0",
-                )}
-              />
-              <line
-                x1="4"
-                y1="17"
-                x2="20"
-                y2="17"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                style={{ transformOrigin: "12px 12px" }}
-                className={cn(
-                  NAV_ICON_TRANSITION,
-                  menuOpen && "-translate-y-[5px] -rotate-45",
-                )}
-              />
-            </svg>
+            <MenuToggleIcon open={menuOpen} />
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import {
   useEffect,
@@ -12,11 +13,24 @@ import {
 import { services, servicesSection } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
 import { ValueStripLayoutSync } from "@/components/sections/ValueStripLayoutSync";
+import { SectionLabelChip } from "@/components/ui/SectionLabelChip";
 import "./value-strip-services.css";
 
 type Service = (typeof services)[number];
 
 const MODAL_DRAG_CLOSE_PX = 96;
+
+const SERVICE_PANEL_TRANSITION = {
+  duration: 0.4,
+  ease: [0.22, 1, 0.36, 1] as const,
+};
+
+const SERVICE_NAV_PILL_TRANSITION = {
+  type: "spring" as const,
+  stiffness: 420,
+  damping: 36,
+  mass: 0.85,
+};
 
 function CheckIcon() {
   return (
@@ -186,6 +200,7 @@ export function ValueStripServices() {
   const [modalDragY, setModalDragY] = useState(0);
   const [modalDragAnimating, setModalDragAnimating] = useState(false);
   const [isModalDragging, setIsModalDragging] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
   const active = services[activeIndex];
 
   const closeModal = () => setModalService(null);
@@ -266,10 +281,16 @@ export function ValueStripServices() {
         <div className="services-panel__layout">
           <div className="services-panel__nav-col">
             <div className="services-panel__nav-sticky">
-              <p className="services-panel__label">{servicesSection.label}</p>
+              <SectionLabelChip className="mb-4">
+                {servicesSection.label}
+              </SectionLabelChip>
               <h2 className={`services-panel__title ${tiltWarp.className}`}>
-                <span className="block lg:inline">{servicesSection.titleLine1}</span>{" "}
-                <span className="block lg:inline">{servicesSection.titleLine2}</span>
+                <span className="services-panel__title-line">
+                  {servicesSection.titleLine1}
+                </span>
+                <span className="services-panel__title-line">
+                  {servicesSection.titleLine2}
+                </span>
               </h2>
               <p className="services-panel__intro">{servicesSection.intro}</p>
 
@@ -330,6 +351,17 @@ export function ValueStripServices() {
                         className={`services-panel__nav-btn${isActive ? " is-active" : ""}`}
                         onClick={() => setActiveIndex(index)}
                       >
+                        {isActive ? (
+                          <motion.span
+                            layoutId="services-nav-pill"
+                            className="services-panel__nav-indicator"
+                            transition={
+                              prefersReducedMotion
+                                ? { duration: 0.15 }
+                                : SERVICE_NAV_PILL_TRANSITION
+                            }
+                          />
+                        ) : null}
                         <span className="services-panel__nav-num">
                           {service.number}
                         </span>
@@ -345,18 +377,36 @@ export function ValueStripServices() {
           </div>
 
           <div className="services-panel__details">
-            <article
-              key={active.number}
-              id={`service-panel-${active.number}`}
-              role="tabpanel"
-              aria-labelledby={`service-tab-${active.number}`}
-              className="services-panel__detail is-active"
-            >
-              <ServiceDetailContent
-                service={active}
-                titleId={`service-title-${active.number}`}
-              />
-            </article>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.article
+                key={active.number}
+                id={`service-panel-${active.number}`}
+                role="tabpanel"
+                aria-labelledby={`service-tab-${active.number}`}
+                className="services-panel__detail is-active"
+                initial={
+                  prefersReducedMotion
+                    ? false
+                    : { opacity: 0, y: 14 }
+                }
+                animate={{ opacity: 1, y: 0 }}
+                exit={
+                  prefersReducedMotion
+                    ? undefined
+                    : { opacity: 0, y: -10 }
+                }
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0.15 }
+                    : SERVICE_PANEL_TRANSITION
+                }
+              >
+                <ServiceDetailContent
+                  service={active}
+                  titleId={`service-title-${active.number}`}
+                />
+              </motion.article>
+            </AnimatePresence>
           </div>
         </div>
       </div>

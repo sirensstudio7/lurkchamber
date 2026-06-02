@@ -14,23 +14,37 @@ type AccordionProps = {
   items: readonly AccordionItem[];
 };
 
-function ChevronIcon({ direction }: { direction: "up" | "down" }) {
+const FAQ_CHEVRON_TRANSITION = {
+  duration: 0.3,
+  ease: [0.22, 1, 0.36, 1] as const,
+};
+
+function ChevronIcon({
+  isOpen,
+  reducedMotion,
+}: {
+  isOpen: boolean;
+  reducedMotion: boolean | null;
+}) {
   return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
+    <motion.span
+      className="faq-accordion__chevron"
       aria-hidden
+      animate={{ rotate: isOpen ? 180 : 0 }}
+      transition={
+        reducedMotion ? { duration: 0.15 } : FAQ_CHEVRON_TRANSITION
+      }
     >
-      <path
-        d={direction === "up" ? "M3.5 9 7 5.5 10.5 9" : "M3.5 5 7 8.5 10.5 5"}
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M3.5 5 7 8.5 10.5 5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </motion.span>
   );
 }
 
@@ -65,7 +79,10 @@ export function Accordion({ items }: AccordionProps) {
             >
               <span className="faq-accordion__question">{item.question}</span>
               <span className="faq-accordion__toggle" aria-hidden>
-                <ChevronIcon direction={isOpen ? "up" : "down"} />
+                <ChevronIcon
+                  isOpen={isOpen}
+                  reducedMotion={prefersReducedMotion}
+                />
               </span>
             </button>
 
