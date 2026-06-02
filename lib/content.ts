@@ -17,8 +17,8 @@ export const site = {
 } as const;
 
 export const hero = {
-  line1: "Stop searching.",
-  line2: "Start designing.",
+  line1: "Creative minds.",
+  line2: "Remarkable results.",
   sublineBefore: "We help you build ",
   sublineAfter: " that feel like our own personal projects.",
   rotatingServices: [
@@ -54,93 +54,201 @@ export const mobileNav = [
 ] as const;
 
 export const clients = {
-  label: "Trusted by teams at",
+  labelLine1: "Trusted by the world's fastest growing startups",
+  labelLine2: "and established brands.",
   logos: [
-    { name: "Google", src: "/logos/google.svg" },
-    { name: "Northline" },
-    { name: "Meridian" },
-    { name: "Glenwood" },
-    { name: "Atlas" },
-    { name: "Horizon" },
-    { name: "Pulse" },
-    { name: "Vertex" },
-    { name: "Ember" },
+    {
+      name: "Termiz Iqtisodiyot va Servis Universiteti",
+      src: "/logos/termiz-university.png",
+    },
+    { name: "Biofarma Group", src: "/logos/biofarma.png" },
+    {
+      name: "Google Student Ambassador",
+      src: "/logos/google-student-ambassador-v2.png",
+    },
+    { name: "EDU HUB", src: "/logos/edu-hub.png" },
+    { name: "ASOBI", src: "/logos/asobi.png" },
+    { name: "Mora", src: "/logos/mora.png" },
+    { name: "Padel Society HUB", src: "/logos/padel-society-hub.png" },
+    { name: "Bridge Media Ent.", src: "/logos/bridge-media.png" },
   ],
 } as const;
 
-export const valueStrip = [
-  "The right fit",
-  "takes months.",
-  "We take days.",
+/** Work highlight images live in public/ (img-1…img-11, media-12…media-20). */
+export const workHighlightsSection = {
+  title: "Highlight Work",
+  intro: "Selected UI and product work from recent collaborations.",
+} as const;
+
+export const workHighlights = [
+  { imageSrc: "/img-1.png", imageAlt: "Image 1" },
+  { imageSrc: "/img-2.png", imageAlt: "Image 2" },
+  { imageSrc: "/img-3.png", imageAlt: "Image 3" },
+  { imageSrc: "/img-4.png", imageAlt: "Image 4" },
+  { imageSrc: "/img-5.png", imageAlt: "Image 5" },
+  { imageSrc: "/img-6.png", imageAlt: "Image 6" },
+  { imageSrc: "/img-7.png", imageAlt: "Image 7" },
+  { imageSrc: "/img-8.png", imageAlt: "Image 8" },
+  { imageSrc: "/img-9.png", imageAlt: "Image 9" },
+  { imageSrc: "/img-10.png", imageAlt: "Image 10" },
+  { imageSrc: "/img-11.png", imageAlt: "Image 11" },
+  { imageSrc: "/media-12.png", imageAlt: "Image 12" },
+  { imageSrc: "/media-13.png", imageAlt: "Image 13" },
+  { imageSrc: "/media-14.png", imageAlt: "Image 14" },
+  { imageSrc: "/media-15.png", imageAlt: "Image 15" },
+  { imageSrc: "/media-16.png", imageAlt: "Image 16" },
+  { imageSrc: "/media-17.png", imageAlt: "Image 17" },
+  { imageSrc: "/media-18.png", imageAlt: "Image 18" },
+  { imageSrc: "/media-19.png", imageAlt: "Image 19" },
+  { imageSrc: "/media-20.png", imageAlt: "Image 20" },
 ] as const;
 
-export const valueStripDesktopLines = [
-  "The right fit takes months.",
-  "We take days.",
-] as const;
+export const servicesSection = {
+  label: "Our services",
+  titleLine1: "Everything in",
+  titleLine2: "one workflow.",
+  intro:
+    "We offer services that help your business design, ship, and grow online. Tap below to explore.",
+} as const;
 
-export const valueStripBento = [
+export const services = [
   {
-    gridArea: "cat-sport",
-    label: "Brand systems",
-    align: "right" as const,
-    color: "#c94e1a",
-    href: "#features",
+    number: "01",
+    navTitle: "Websites",
+    title: "Brand websites that feel memorable",
+    description:
+      "Sites with real personality and polish — designed to feel like yours, not a template with your logo dropped in.",
+    body: [
+      "A lot of company sites look identical. Same hero, same three column feature grid, same footer packed with links nobody clicks. Before we open Figma, we ask who is visiting and what they need to understand in the first ten seconds.",
+      "Then we sketch the pages that matter for your business. Homepage, work, pricing, hiring, whatever you actually need. Not a sitemap copied from the last client because it looked good in a presentation.",
+      "Type, color, and motion come after structure, not before. You get annotated files, assets exported the way your dev asked for them, and we stay in the thread for the small fixes that only show up on a real phone.",
+    ],
+    imageSrc: "/img-1.png",
+    cardColor: "#0d9f6e",
+    cardTextColor: "#ffffff",
+    points: [
+      "Custom homepage & inner page layouts",
+      "Responsive design across all breakpoints",
+      "Design system & reusable component library",
+      "Typography, color, and spacing tokens",
+      "Developer-ready Figma handoff & assets",
+      "Launch support & post-ship refinements",
+    ],
   },
   {
-    gridArea: "cat-tees",
-    label: "Landing pages",
-    color: "#ffca26",
-    labelTone: "dark" as const,
-    href: "#features",
+    number: "02",
+    navTitle: "Landing pages",
+    title: "Pages built to convert from day one",
+    description:
+      "High-conversion pages with clear story, sharp visuals, and flows that turn visitors into sign-ups.",
+    body: [
+      "Most landing pages lose people on the first screen. The offer is buried, the headline is vague, and by the third scroll someone already opened another tab.",
+      "We put the story in order. What it is. Why it matters. Proof it works. What to do next. Every section earns its spot. If something is filler, we cut it or say so out loud.",
+      "You leave with a page ready to build. Sections are modular so you can swap a headline or testimonial block after a test without tearing the whole layout apart.",
+    ],
+    imageSrc: "/img-5.png",
+    cardColor: "#5b5bd6",
+    cardTextColor: "#ffffff",
+    points: [
+      "Conversion-focused page structure",
+      "Hero, proof, features & CTA sections",
+      "Copy-led layout hierarchy",
+      "Mobile-first responsive layouts",
+      "A/B-ready section variations",
+      "Launch-ready design in weeks, not months",
+    ],
   },
   {
-    gridArea: "cat-hoodies",
-    label: "Product UI",
-    color: "#18542a",
-    href: "#features",
+    number: "03",
+    navTitle: "Mobile apps",
+    title: "Native-feeling product UI",
+    description:
+      "iOS and Android interfaces that feel intentional — polished flows, consistent patterns, and details users notice.",
+    body: [
+      "Users notice when an app feels cheap. Buttons too small. Back navigation in the wrong place. A spinner that looks like the app froze.",
+      "We walk through the flows that actually get used. Sign up. The main action. Settings. The screens people see when something breaks.",
+      "iOS and Android each get UI that respects the platform. Not a website squeezed into a phone frame. Your dev team gets named screens, spacing specs, and a prototype they can tap through before writing the first line of code.",
+    ],
+    imageSrc: "/img-3.png",
+    cardColor: "#f5cc24",
+    cardTextColor: "#0a0a0a",
+    points: [
+      "Core user flows & interaction design",
+      "iOS and Android UI patterns",
+      "Onboarding, settings & profile screens",
+      "Micro-interactions & state design",
+      "Prototype-ready screen sets",
+      "Design specs for engineering handoff",
+    ],
   },
   {
-    gridArea: "cat-ladies-shirts",
-    label: "Web design",
-    color: "#2563eb",
-    href: "#features",
+    number: "04",
+    navTitle: "Ecommerce",
+    title: "Stores that feel premium and effortless",
+    description:
+      "Online shops where browsing feels good and checkout feels fast — without sacrificing brand or trust.",
+    body: [
+      "If a customer cannot pick a size, see the total, or find checkout in two taps, you lost the sale before ads could help.",
+      "We treat browse, product page, cart, and checkout as one continuous experience. Same type, same spacing rules, same voice from empty cart to order confirmation.",
+      "Mobile gets the extra pass. That is where most people shop and where most checkouts get abandoned halfway through.",
+    ],
+    imageSrc: "/img-8.png",
+    cardColor: "#e85a4a",
+    cardTextColor: "#ffffff",
+    points: [
+      "Storefront & collection page design",
+      "Product detail & variant selection UX",
+      "Cart, checkout & order confirmation",
+      "Trust signals & review placement",
+      "Mobile shopping experience",
+      "Brand-consistent visual language",
+    ],
   },
   {
-    gridArea: "cat-youth",
-    label: "Mobile apps",
-    color: "#7c3aed",
-    href: "#features",
+    number: "05",
+    navTitle: "SaaS",
+    title: "Dashboards and scalable design systems",
+    description:
+      "Complex product UI made clear — dashboards, settings, onboarding, and patterns that grow with your team.",
+    body: [
+      "Product teams ship fast. One new table this sprint, a settings redesign next month, a wizard nobody asked for in between. Pretty soon every screen looks like it came from a different app.",
+      "We design around the tasks people repeat daily. Log in. Do the work. Pull the report. Undo the mistake they made at 4pm.",
+      "Shared components for tables, filters, forms, and empty states keep new features from feeling like side quests. Devs get tokens and a short doc, not a graveyard of one off frames.",
+    ],
+    imageSrc: "/media-14.png",
+    cardColor: "#3ecfad",
+    cardTextColor: "#0a0a0a",
+    points: [
+      "Dashboard & analytics interface design",
+      "Onboarding, billing & settings flows",
+      "Tables, filters, forms & modals",
+      "Scalable component & token system",
+      "Admin panels & role-based views",
+      "Documentation for design-dev alignment",
+    ],
   },
   {
-    gridArea: "cat-kids",
-    label: "Design systems",
-    color: "#db2777",
-    href: "#features",
-  },
-  {
-    gridArea: "cat-cologne",
-    label: "Marketing sites",
-    align: "right" as const,
-    color: "#0d9488",
-    href: "#features",
-  },
-  {
-    gridArea: "cat-mens-shirts",
-    label: "Ecommerce",
-    color: "#ea580c",
-    href: "#features",
-  },
-  {
-    gridArea: "cat-intimate",
-    label: "SaaS dashboards",
-    color: "#4f46e5",
-    href: "#features",
-  },
-  {
-    gridArea: "banner",
-    variant: "banner" as const,
-    href: "#contact",
+    number: "06",
+    navTitle: "LMS",
+    title: "Learning platforms people stick with",
+    description:
+      "Course layouts, progress tracking, and interfaces that keep learners engaged instead of lost in menus.",
+    body: [
+      "Learning apps are used in fragments. Someone opens a lesson on Tuesday, forgets until Saturday, and opens the app feeling lost. That is fixable in the UI.",
+      "Modules stay short. Progress shows up without turning the dashboard into a video game. Instructors can see who stalled without digging through three admin panels.",
+      "We favor readable type and quiet layouts over decorative clutter. People are here to learn, not to admire the illustration budget.",
+    ],
+    imageSrc: "/img-7.png",
+    cardColor: "#9b87f5",
+    cardTextColor: "#ffffff",
+    points: [
+      "Course & lesson page structure",
+      "Progress tracking & enrollment UX",
+      "Quizzes, certificates & assessments",
+      "Instructor & admin dashboards",
+      "Content-heavy layouts done right",
+      "Accessible, readable typography systems",
+    ],
   },
 ] as const;
 

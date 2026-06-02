@@ -77,10 +77,10 @@ export function Hero() {
       {/* Spacer for fixed header (pill ~60–68px + top padding) */}
       <div className="h-[76px] shrink-0 md:h-[88px]" aria-hidden />
       <div
-        className="hero-content container-wide relative flex min-h-0 flex-1 flex-col overflow-visible bg-transparent pt-0 md:pt-4"
+        className="hero-content container-wide relative flex min-h-0 flex-1 flex-col justify-center overflow-visible bg-transparent pt-0 md:justify-end md:pt-4"
         style={{ color: HERO_TEXT, backgroundColor: "transparent" }}
       >
-        <div className="hero-main mb-[72px] mt-6 flex w-full flex-col items-center gap-8 md:mt-auto md:gap-0">
+        <div className="hero-main flex w-full flex-col items-center gap-8 md:mb-[72px] md:mt-auto md:gap-0">
           <motion.div
             variants={item}
             initial="hidden"

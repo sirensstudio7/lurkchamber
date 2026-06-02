@@ -11,12 +11,10 @@ import {
   refreshScrollTriggersPreservingScroll,
 } from "@/lib/scroll-layout";
 import { getAppScrollY } from "@/lib/lenis-scroll";
+import { onLayoutStable } from "@/lib/layout-stable";
 import { isMobileViewport } from "@/lib/mobile-viewport";
 import { updateScrollTriggers } from "@/lib/scroll-trigger-refresh";
 
-function readFeaturesScrollY() {
-  return getAppScrollY() || window.scrollY;
-}
 import { FeaturesExpandText } from "@/components/sections/FeaturesExpandText";
 import { CircularLink } from "@/components/ui/CircularLink";
 import { SectionLabelChip } from "@/components/ui/SectionLabelChip";
@@ -158,12 +156,36 @@ export function Features() {
 
     let cachedHorizontalEndX: number | null = null;
     let cachedZoomDistance: number | null = null;
+    let featuresScrollTrigger: ScrollTrigger | null = null;
+
+    const readScrollY = () => getAppScrollY() || window.scrollY;
+
+    const isBeforeFeatures = () => {
+      if (!featuresScrollTrigger) return true;
+      return readScrollY() < featuresScrollTrigger.start - 80;
+    };
+
+    const canSafelyRefreshLayout = () => {
+      if (!featuresScrollTrigger) return true;
+
+      const servicesSection = document.getElementById("services");
+      if (servicesSection) {
+        const servicesBottom = servicesSection.getBoundingClientRect().bottom;
+        if (servicesBottom < getViewportHeight() * 2) return false;
+      }
+
+      const featuresTop = pinSection.getBoundingClientRect().top;
+      if (featuresTop < getViewportHeight() * 1.5) return false;
+      return isBeforeFeatures();
+    };
 
     const measureHorizontalEndX = () => {
+      const currentX = gsap.getProperty(pinWrap, "x") as number;
       gsap.set(pinWrap, { x: 0 });
       const rect = lastCard.getBoundingClientRect();
       const cardCenterX = rect.left + rect.width / 2;
       cachedHorizontalEndX = window.innerWidth / 2 - cardCenterX;
+      gsap.set(pinWrap, { x: currentX });
       return cachedHorizontalEndX;
     };
 
@@ -194,11 +216,6 @@ export function Features() {
     measureHorizontalEndX();
 
     const ctx = gsap.context(() => {
-      const horizontal = getHorizontalDistance();
-      const zoom = getZoomDistance();
-      const total = horizontal + zoom;
-      const hEnd = horizontal / total;
-
       gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
       gsap.set(expandPanel, { opacity: 0 });
       expandPanel.classList.remove("features-expand-content-visible");
@@ -221,22 +238,30 @@ export function Features() {
         gsap.set(lastCardText, { opacity: 1, visibility: "visible" });
       };
 
-      ScrollTrigger.create({
+      featuresScrollTrigger = ScrollTrigger.create({
         trigger: pinSection,
         scroller: document.documentElement,
         start: "top top",
-        end: () => `+=${total}`,
+        end: () => `+=${getHorizontalDistance() + getZoomDistance()}`,
         pin: true,
         scrub: true,
-        invalidateOnRefresh: false,
+        invalidateOnRefresh: true,
         anticipatePin: 1,
+        onRefresh() {
+          cachedHorizontalEndX = null;
+          measureHorizontalEndX();
+        },
         onUpdate(self) {
+          const horizontal = getHorizontalDistance();
+          const zoom = getZoomDistance();
+          const total = horizontal + zoom;
+          const hEnd = total > 0 ? horizontal / total : 0;
           const progress = self.progress;
           const sectionW = pinSection.offsetWidth;
           const sectionH = pinSection.offsetHeight;
 
           if (progress < hEnd) {
-            const hProgress = progress / hEnd;
+            const hProgress = hEnd > 0 ? progress / hEnd : 0;
             gsap.set(pinWrap, { x: getHorizontalEndX() * hProgress });
             gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
             gsap.set(expandPanel, { opacity: 0 });
@@ -282,35 +307,91 @@ export function Features() {
       });
     }, pinSection);
 
-    const refresh = (required = false) => {
+    const refresh = (force = false) => {
       cachedHorizontalEndX = null;
       cachedZoomDistance = null;
       measureHorizontalEndX();
-      refreshScrollTriggersPreservingScroll({ required });
+
+      if (!force && !isBeforeFeatures()) {
+        updateScrollTriggers();
+        return;
+      }
+
+      refreshScrollTriggersPreservingScroll({ required: true });
     };
     const removeLayoutListener = onLayoutWidthChange(() => refresh(true));
-    let initialRefreshTimer: number | undefined;
-    const scheduleInitialRefresh = () => {
-      if (initialRefreshTimer !== undefined) {
-        window.clearTimeout(initialRefreshTimer);
+    let layoutRefreshTimer: number | undefined;
+    const scheduleLayoutRefresh = (force = false) => {
+      if (layoutRefreshTimer !== undefined) {
+        window.clearTimeout(layoutRefreshTimer);
       }
-      initialRefreshTimer = window.setTimeout(() => {
-        initialRefreshTimer = undefined;
-        if (readFeaturesScrollY() > 80) return;
+      layoutRefreshTimer = window.setTimeout(() => {
+        layoutRefreshTimer = undefined;
         if (isMobileViewport()) {
-          updateScrollTriggers();
+          refresh(force);
           return;
         }
-        refresh(true);
-      }, 600);
+        refresh(force || isBeforeFeatures());
+      }, 200);
     };
-    scheduleInitialRefresh();
+
+    const initialRefreshTimers = [600, 1400, 2600].map((ms) =>
+      window.setTimeout(() => scheduleLayoutRefresh(true), ms),
+    );
+
+    const getPrecedingSections = () => {
+      const featuresSectionEl = pinSection.closest("section");
+      const parent = featuresSectionEl?.parentElement;
+      if (!parent || !featuresSectionEl) return [];
+
+      const children = Array.from(parent.children);
+      const featuresIndex = children.indexOf(featuresSectionEl);
+      if (featuresIndex <= 0) return [];
+
+      return children.slice(0, featuresIndex);
+    };
+
+    const measurePrecedingHeight = (sections: Element[]) =>
+      sections.reduce(
+        (total, section) => total + section.getBoundingClientRect().height,
+        0,
+      );
+
+    const precedingSections = getPrecedingSections();
+    let lastPrecedingHeight = measurePrecedingHeight(precedingSections);
+    const sectionResizeObserver =
+      typeof ResizeObserver !== "undefined" && precedingSections.length > 0
+        ? new ResizeObserver(() => {
+            const height = measurePrecedingHeight(precedingSections);
+            if (Math.abs(height - lastPrecedingHeight) < 8) return;
+            lastPrecedingHeight = height;
+            if (canSafelyRefreshLayout()) {
+              scheduleLayoutRefresh(true);
+            }
+          })
+        : null;
+    precedingSections.forEach((section) =>
+      sectionResizeObserver?.observe(section),
+    );
+
+    const onWindowLoad = () => scheduleLayoutRefresh(true);
+    window.addEventListener("load", onWindowLoad);
+    const removeLayoutStableListener = onLayoutStable(() => {
+      if (canSafelyRefreshLayout()) {
+        scheduleLayoutRefresh(true);
+      }
+    });
 
     return () => {
       removeLayoutListener();
-      if (initialRefreshTimer !== undefined) {
-        window.clearTimeout(initialRefreshTimer);
+      removeLayoutStableListener();
+      initialRefreshTimers.forEach((id) => window.clearTimeout(id));
+      if (layoutRefreshTimer !== undefined) {
+        window.clearTimeout(layoutRefreshTimer);
       }
+      sectionResizeObserver?.disconnect();
+      window.removeEventListener("load", onWindowLoad);
+      featuresScrollTrigger = null;
       pinSection.classList.remove("features-is-zooming");
       ctx.revert();
     };
