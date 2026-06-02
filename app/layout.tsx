@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Instrument_Serif, Inter } from "next/font/google";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
+import { Header } from "@/components/layout/Header";
 import { ModelViewerScript } from "@/components/ui/ModelViewerScript";
 import { hero, site } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
@@ -54,9 +55,12 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full overflow-x-hidden bg-background text-foreground">
+      <body className="min-h-full overflow-x-clip bg-background text-foreground">
         <ModelViewerScript />
-        <SmoothScroll>{children}</SmoothScroll>
+        <SmoothScroll>
+          <Header />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );

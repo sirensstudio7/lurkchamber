@@ -12,7 +12,7 @@ const HERO_EXIT_OFFSET = 160;
 const NAV_THEME_TRANSITION =
   "transition-colors duration-500 ease-in-out motion-reduce:duration-150";
 const NAV_ICON_MORPH =
-  "transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none motion-reduce:duration-150";
+  "transition-[top,transform,opacity,scale] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none motion-reduce:duration-150";
 
 function MenuToggleIcon({ open }: { open: boolean }) {
   return (
@@ -125,12 +125,12 @@ export function Header() {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 overflow-visible px-4 pt-4 md:px-6 md:pt-5">
-      <div className="flex w-full justify-center overflow-visible md:container-wide">
+    <header className="fixed inset-x-0 top-0 z-50 box-border w-full max-w-[100dvw] overflow-x-clip px-4 pt-4 md:px-6 md:pt-5">
+      <div className="mx-auto flex w-full min-w-0 max-w-full justify-center md:container-wide">
         <div
           ref={navPillRef}
           className={cn(
-            "flex w-full items-center justify-between gap-2 overflow-visible rounded-[55px] px-4 py-1.5 md:w-auto md:max-w-3xl md:justify-start md:gap-4 md:px-4 md:py-2",
+            "flex w-full min-w-0 max-w-full items-center justify-between gap-2 overflow-hidden rounded-[55px] px-4 py-1.5 md:w-auto md:max-w-3xl md:justify-start md:gap-4 md:px-4 md:py-2",
             NAV_THEME_TRANSITION,
             "h-[60px] md:h-[68px]",
             pastHero ? "bg-hero-bg" : "bg-background",
@@ -203,7 +203,7 @@ export function Header() {
           <button
             type="button"
             className={cn(
-              "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-visible rounded-full md:hidden",
+              "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full md:hidden",
               NAV_THEME_TRANSITION,
               pastHero
                 ? "text-white hover:bg-white/10"
@@ -223,7 +223,7 @@ export function Header() {
         id="mobile-menu"
         ref={mobileMenuRef}
         className={cn(
-          "fixed inset-x-4 top-[calc(60px+1.25rem)] z-40 overflow-hidden rounded-3xl border border-border bg-background shadow-lg transition-all duration-300 md:hidden",
+          "fixed inset-x-4 top-[calc(60px+1.25rem)] z-40 box-border max-w-[calc(100dvw-2rem)] overflow-hidden rounded-3xl border border-border bg-background shadow-lg transition-all duration-300 md:hidden",
           menuOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0",

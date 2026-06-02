@@ -7,7 +7,6 @@ import {
   useTransform,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { Header } from "@/components/layout/Header";
 import { DeviceMockup } from "@/components/ui/DeviceMockup";
 import { RotatingText } from "@/components/ui/RotatingText";
 import { brand, hero } from "@/lib/content";
@@ -73,7 +72,6 @@ export function Hero() {
 
   const content = (
     <div className="relative z-10 flex flex-1 flex-col">
-      <Header />
       {/* Spacer for fixed header (pill ~60–68px + top padding) */}
       <div className="h-[76px] shrink-0 md:h-[88px]" aria-hidden />
       <div
