@@ -53,6 +53,64 @@ export const mobileNav = [
   { label: "Contact", href: "#contact", highlight: false as const },
 ] as const;
 
+export const aboutSection = {
+  paragraphs: [
+    [
+      { type: "word", text: "We're" },
+      { type: "word", text: "a" },
+      { type: "word", text: "tech" },
+      { type: "word", text: "studio" },
+      { type: "word", text: "where" },
+      { type: "word", text: "design" },
+      { type: "word", text: "meets" },
+      { type: "word", text: "code" },
+      { type: "word", text: "—" },
+      { type: "word", text: "building" },
+      {
+        type: "icon",
+        src: "/about/icon-websites.svg",
+        alt: "",
+      },
+      { type: "word", text: "websites," },
+      {
+        type: "icon",
+        src: "/about/icon-apps.svg",
+        alt: "",
+      },
+      { type: "word", text: "apps," },
+      { type: "word", text: "and" },
+      {
+        type: "icon",
+        src: "/about/icon-design.svg",
+        alt: "",
+      },
+      { type: "word", text: "digital" },
+      { type: "word", text: "products" },
+      { type: "word", text: "for" },
+    ],
+    [
+      {
+        type: "icon",
+        src: "/about/icon-startups.svg",
+        alt: "",
+      },
+      { type: "word", text: "founders" },
+      { type: "word", text: "and" },
+      {
+        type: "icon",
+        src: "/about/icon-brands.svg",
+        alt: "",
+      },
+      { type: "word", text: "brands" },
+      { type: "word", text: "who" },
+      { type: "word", text: "refuse" },
+      { type: "word", text: "to" },
+      { type: "word", text: "blend" },
+      { type: "word", text: "in." },
+    ],
+  ],
+} as const;
+
 export const clients = {
   labelLine1: "Trusted by the world's fastest growing startups",
   labelLine2: "and established brands.",
@@ -71,6 +129,7 @@ export const clients = {
     { name: "Mora", src: "/logos/mora.png" },
     { name: "Padel Society HUB", src: "/logos/padel-society-hub.png" },
     { name: "Bridge Media Ent.", src: "/logos/bridge-media.png" },
+    { name: "NanoFi", src: "/logos/nanofi.png" },
   ],
 } as const;
 

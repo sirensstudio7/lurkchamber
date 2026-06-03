@@ -1,4 +1,5 @@
 import { Footer } from "@/components/layout/Footer";
+import { About } from "@/components/sections/About";
 import { Hero } from "@/components/sections/Hero";
 import { LogoMarquee } from "@/components/sections/LogoMarquee";
 import { ValueStrip } from "@/components/sections/ValueStrip";
@@ -13,6 +14,7 @@ export default function Home() {
     <>
       <main>
         <Hero />
+        <About />
         <LogoMarquee />
         <ValueStrip />
         <ValueStripServices />

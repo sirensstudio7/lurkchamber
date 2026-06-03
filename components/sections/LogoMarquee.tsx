@@ -22,6 +22,11 @@ function ClientLogo({
 
 export function LogoMarquee() {
   const marqueeItems = [...clients.logos, ...clients.logos];
+  const topRowLogos = clients.logos.slice(0, 4);
+  const bottomRowLogos = clients.logos.slice(4);
+
+  const desktopLogoClassName =
+    "h-16 w-auto max-w-[15rem] object-contain md:h-20 md:max-w-[18rem]";
 
   return (
     <section
@@ -58,16 +63,22 @@ export function LogoMarquee() {
           </ul>
         </div>
 
-        <ul className="hidden grid-cols-4 items-center justify-items-center gap-x-6 gap-y-8 md:grid md:gap-x-12 md:gap-y-10">
-          {clients.logos.map((logo) => (
-            <li key={logo.name} className="flex items-center justify-center">
-              <ClientLogo
-                logo={logo}
-                className="h-16 w-auto max-w-[15rem] object-contain md:h-20 md:max-w-[18rem]"
-              />
-            </li>
-          ))}
-        </ul>
+        <div className="hidden flex-col gap-y-8 md:flex md:gap-y-10">
+          <ul className="grid grid-cols-4 items-center justify-items-center gap-x-6 md:gap-x-12">
+            {topRowLogos.map((logo) => (
+              <li key={logo.name} className="flex items-center justify-center">
+                <ClientLogo logo={logo} className={desktopLogoClassName} />
+              </li>
+            ))}
+          </ul>
+          <ul className="grid grid-cols-5 items-center justify-items-center gap-x-6 md:gap-x-12">
+            {bottomRowLogos.map((logo) => (
+              <li key={logo.name} className="flex items-center justify-center">
+                <ClientLogo logo={logo} className={desktopLogoClassName} />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );
