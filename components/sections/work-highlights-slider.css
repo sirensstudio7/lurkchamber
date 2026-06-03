@@ -51,7 +51,7 @@
 .work-highlight-frame {
   width: 100%;
   overflow: hidden;
-  border-radius: 1.5rem;
+  border-radius: 1.25rem;
   transform: scale(1);
   transform-origin: center center;
   transition: transform var(--highlight-duration) var(--highlight-ease);

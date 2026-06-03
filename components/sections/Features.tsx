@@ -418,7 +418,7 @@ export function Features() {
                   />
                 </div>
                 <div className="mt-4 shrink-0">
-                  <h3 className="mb-2 text-lg font-semibold tracking-tight text-foreground">
+                  <h3 className={`${tiltWarp.className} mb-2 text-lg font-normal tracking-tight text-foreground`}>
                     {feature.title}
                   </h3>
                   <p className="line-clamp-2 text-sm leading-relaxed text-muted">
@@ -473,7 +473,7 @@ export function Features() {
                   data-features-last-card-text={isLast ? true : undefined}
                   className="relative mt-4 shrink-0 md:mt-5"
                 >
-                  <h3 className="mb-2 text-xl font-semibold tracking-tight text-foreground md:mb-3 md:text-2xl">
+                  <h3 className={`${tiltWarp.className} mb-2 text-xl font-normal tracking-tight text-foreground md:mb-3 md:text-2xl`}>
                     {feature.title}
                   </h3>
                   <p className="line-clamp-2 text-base leading-relaxed text-muted md:text-lg">

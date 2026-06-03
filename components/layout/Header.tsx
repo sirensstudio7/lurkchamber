@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { header, mobileNav, site } from "@/lib/content";
-import { tiltWarp } from "@/lib/fonts";
+import { header, mobileNav } from "@/lib/content";
+import { LurkLogo } from "@/components/ui/LurkLogo";
 import { getAppScrollY, onAppScroll, scrollToHash } from "@/lib/lenis-scroll";
 import { playNavPopSound, preloadNavPopSound } from "@/lib/playPopSound";
 import { cn } from "@/lib/utils";
@@ -144,18 +144,15 @@ export function Header() {
                 ? "focus-visible:outline-white"
                 : "focus-visible:outline-nav-accent",
             )}
+            aria-label="Lurk home"
             onClick={(event) => handleSectionLink(event, "#hero")}
           >
-            <span
+            <LurkLogo
               className={cn(
-                tiltWarp.className,
-                "text-xl tracking-tight md:text-2xl",
                 NAV_THEME_TRANSITION,
-                pastHero ? "text-white" : "text-nav-text",
+                pastHero ? "text-white" : "text-black",
               )}
-            >
-              {site.logo}
-            </span>
+            />
           </a>
 
           <nav

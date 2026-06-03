@@ -121,32 +121,10 @@ export function Hero() {
           >
             <a
               href={hero.cta.href}
-              className="inline-flex h-11 shrink-0 items-center rounded-[43px] bg-hero-foreground px-5 font-[family-name:var(--font-inter)] text-base font-semibold text-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground"
+              className="inline-flex h-12 shrink-0 items-center rounded-[43px] bg-hero-foreground px-10 font-[family-name:var(--font-inter)] text-lg font-semibold text-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground md:h-14 md:px-12 md:text-xl"
               onClick={() => playPopSound()}
             >
               {hero.cta.label}
-            </a>
-            <a
-              href={hero.cta.href}
-              aria-label="Go to contact"
-              className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-hero-foreground text-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground"
-              onClick={() => playPopSound()}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
             </a>
           </motion.div>
           </motion.div>

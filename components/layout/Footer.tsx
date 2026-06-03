@@ -1,6 +1,8 @@
 "use client";
 
+import { EnvelopeIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import { FaBehance, FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { footer, site, socials } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
 import { scrollToHash } from "@/lib/lenis-scroll";
@@ -58,6 +60,63 @@ function FooterColumn({
         ))}
       </div>
     </div>
+  );
+}
+
+const socialIconClass = "h-5 w-5";
+
+function SocialIcon({ label }: { label: string }) {
+  switch (label) {
+    case "Email":
+      return <EnvelopeIcon className={socialIconClass} aria-hidden />;
+    case "Instagram":
+      return <FaInstagram className={socialIconClass} aria-hidden />;
+    case "X":
+      return <FaXTwitter className={socialIconClass} aria-hidden />;
+    case "Behance":
+      return <FaBehance className={socialIconClass} aria-hidden />;
+    default:
+      return null;
+  }
+}
+
+function FooterSocialLink({
+  label,
+  href,
+  onClick,
+  ariaLabel,
+}: {
+  label: string;
+  href: string;
+  onClick?: () => void;
+  ariaLabel?: string;
+}) {
+  const className =
+    "inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f3f0e8] text-[#0a0d12] transition-colors hover:bg-[#ebe5d8] hover:text-hero-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-bg";
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={className}
+        aria-label={ariaLabel ?? label}
+        onClick={onClick}
+      >
+        <SocialIcon label={label} />
+      </button>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      className={className}
+      aria-label={ariaLabel ?? label}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+    >
+      <SocialIcon label={label} />
+    </a>
   );
 }
 
@@ -134,38 +193,23 @@ export function Footer() {
             <FooterColumn title="Company" links={footer.company} />
             <div>
               <p className="mb-4 font-[family-name:var(--font-inter)] text-[13px] font-medium uppercase tracking-[0.5px] text-[#535862]">
-                Contact
+                Connect
               </p>
-              <button
-                type="button"
-                onClick={copyEmail}
-                className="group text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-bg"
-                aria-label={`Copy email ${site.email}`}
-              >
-                <span className="font-[family-name:var(--font-inter)] text-lg font-semibold tracking-tight text-[#0a0d12] transition-colors group-hover:text-hero-bg md:text-xl">
-                  {site.email}
-                </span>
-                <span className="mt-1 block font-[family-name:var(--font-inter)] text-xs uppercase tracking-widest text-[#535862]">
-                  {copied ? "Copied!" : "Click to copy"}
-                </span>
-              </button>
-              <ul className="mt-4 flex flex-col gap-2">
+              <ul className="flex flex-wrap gap-2">
                 {socials.map((social) => (
                   <li key={social.label}>
-                    <a
+                    <FooterSocialLink
+                      label={social.label}
+                      ariaLabel={
+                        social.label === "Email" && copied
+                          ? "Email copied"
+                          : social.label
+                      }
                       href={social.href}
-                      className="font-[family-name:var(--font-inter)] text-[17px] font-semibold leading-[1.6] text-[#0a0d12] no-underline transition-colors hover:text-hero-bg"
-                      target={
-                        social.href.startsWith("http") ? "_blank" : undefined
+                      onClick={
+                        social.label === "Email" ? copyEmail : undefined
                       }
-                      rel={
-                        social.href.startsWith("http")
-                          ? "noopener noreferrer"
-                          : undefined
-                      }
-                    >
-                      {social.label}
-                    </a>
+                    />
                   </li>
                 ))}
               </ul>

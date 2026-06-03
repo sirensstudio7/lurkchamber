@@ -344,7 +344,7 @@ export function ValueStripHighlights() {
           >
             {workHighlightsSection.title}
           </h2>
-          <p className="mx-auto mt-1.5 max-w-2xl text-base leading-relaxed text-muted md:mt-2">
+          <p className="mx-auto mt-1.5 max-w-2xl text-[18px] leading-relaxed text-muted md:mt-2">
             {workHighlightsSection.intro}
           </p>
         </Reveal>

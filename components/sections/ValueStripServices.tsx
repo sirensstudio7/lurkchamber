@@ -42,10 +42,10 @@ function CheckIcon() {
       aria-hidden
       className="services-panel__points-icon"
     >
-      <circle cx="9" cy="9" r="9" fill="currentColor" />
+      <circle cx="9" cy="9" r="9" className="services-panel__points-icon-circle" />
       <path
         d="M5.25 9.25L7.75 11.75L12.75 6.75"
-        stroke="#fff"
+        className="services-panel__points-icon-check"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -73,7 +73,7 @@ function ServiceDetailContent({
           sizes="(max-width: 768px) 100vw, 42vw"
         />
       </div>
-      <h3 id={titleId} className="services-panel__detail-title">
+      <h3 id={titleId} className={`services-panel__detail-title ${tiltWarp.className}`}>
         {service.title}
       </h3>
       <div className="services-panel__detail-copy">

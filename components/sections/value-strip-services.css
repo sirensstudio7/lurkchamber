@@ -61,7 +61,8 @@
 .services-panel__intro {
   margin: 1rem 0 0;
   max-width: 22rem;
-  font-size: 0.9375rem;
+  font-size: 1rem;
+  font-weight: 400;
   line-height: 1.6;
   color: color-mix(in srgb, var(--foreground) 86%, transparent);
 }
@@ -419,11 +420,11 @@
 }
 
 .services-panel__nav-btn.is-active {
-  color: #fff;
+  color: var(--hero-bg);
 }
 
 .services-panel__nav-btn.is-active:hover {
-  color: #fff;
+  color: var(--hero-bg);
 }
 
 .services-panel__nav-indicator {
@@ -431,7 +432,7 @@
   inset: 0;
   z-index: 0;
   border-radius: 999px;
-  background: var(--hero-bg);
+  background: color-mix(in srgb, var(--hero-bg) 32%, var(--background));
 }
 
 .services-panel__nav-num,
@@ -440,16 +441,20 @@
   z-index: 1;
 }
 
+.services-panel__nav-btn.is-active .services-panel__nav-name {
+  font-weight: 700;
+}
+
 .services-panel__nav-num {
   min-width: 1.35rem;
   font-size: 0.8125rem;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.04em;
 }
 
 .services-panel__nav-name {
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -476,9 +481,9 @@
 .services-panel__detail-title {
   margin: 0;
   font-size: clamp(1.15rem, 2.2vw, 1.45rem);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.25;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--foreground);
 }
 
@@ -492,7 +497,8 @@
 
 .services-panel__detail-copy p {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.125rem;
+  font-weight: 400;
   line-height: 1.7;
   color: color-mix(in srgb, var(--foreground) 88%, transparent);
 }
@@ -517,18 +523,25 @@
 
 .services-panel__points li {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.65rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: 700;
   line-height: 1.5;
   color: color-mix(in srgb, var(--foreground) 78%, transparent);
 }
 
 .services-panel__points-icon {
   flex-shrink: 0;
-  margin-top: 0.05rem;
-  color: var(--foreground);
+}
+
+.services-panel__points-icon-circle {
+  fill: color-mix(in srgb, var(--hero-bg) 32%, var(--background));
+}
+
+.services-panel__points-icon-check {
+  stroke: var(--hero-bg);
+  fill: none;
 }
 
 @media (max-width: 1023px) {

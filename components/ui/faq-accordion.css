@@ -7,8 +7,8 @@
 .faq-accordion__item {
   overflow: hidden;
   border-radius: 1rem;
-  background: var(--features-expand-bg);
-  transition: background-color 0.25s ease;
+  background: #fff;
+  transition: background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .faq-accordion__item--open {
@@ -35,7 +35,7 @@
   font-weight: 600;
   line-height: 1.35;
   color: var(--foreground);
-  transition: color 0.25s ease;
+  transition: color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .faq-accordion__item--open .faq-accordion__question {
@@ -59,8 +59,8 @@
   background: var(--hero-bg);
   color: #fff;
   transition:
-    background-color 0.25s ease,
-    color 0.25s ease;
+    background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .faq-accordion__chevron {
@@ -79,9 +79,18 @@
   font-size: 0.95rem;
   line-height: 1.6;
   color: var(--muted);
-  transition: color 0.25s ease;
+  transition: color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .faq-accordion__item--open .faq-accordion__answer {
   color: rgba(255, 255, 255, 0.88);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-accordion__item,
+  .faq-accordion__question,
+  .faq-accordion__toggle,
+  .faq-accordion__answer {
+    transition-duration: 0.15s;
+  }
 }

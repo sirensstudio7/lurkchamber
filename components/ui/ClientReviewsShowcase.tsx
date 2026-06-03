@@ -182,7 +182,7 @@ export function ClientReviewsShowcase() {
               >
                 {caseStudiesSection.title}
               </h2>
-              <p className="mt-1.5 max-w-2xl text-base leading-relaxed text-muted md:mt-2">
+              <p className="mt-1.5 max-w-2xl text-[18px] leading-relaxed text-muted md:mt-2">
                 {caseStudiesSection.intro}
               </p>
             </div>

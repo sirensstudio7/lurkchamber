@@ -74,33 +74,53 @@ export const clients = {
   ],
 } as const;
 
-/** Work highlight images live in public/ (img-1…img-11, media-12…media-20). */
+/** Work highlight images live in public/work-highlights/. */
 export const workHighlightsSection = {
   title: "Highlight Work",
   intro: "Selected UI and product work from recent collaborations.",
 } as const;
 
 export const workHighlights = [
-  { imageSrc: "/img-1.png", imageAlt: "Image 1" },
-  { imageSrc: "/img-2.png", imageAlt: "Image 2" },
-  { imageSrc: "/img-3.png", imageAlt: "Image 3" },
-  { imageSrc: "/img-4.png", imageAlt: "Image 4" },
-  { imageSrc: "/img-5.png", imageAlt: "Image 5" },
-  { imageSrc: "/img-6.png", imageAlt: "Image 6" },
-  { imageSrc: "/img-7.png", imageAlt: "Image 7" },
-  { imageSrc: "/img-8.png", imageAlt: "Image 8" },
-  { imageSrc: "/img-9.png", imageAlt: "Image 9" },
-  { imageSrc: "/img-10.png", imageAlt: "Image 10" },
-  { imageSrc: "/img-11.png", imageAlt: "Image 11" },
-  { imageSrc: "/media-12.png", imageAlt: "Image 12" },
-  { imageSrc: "/media-13.png", imageAlt: "Image 13" },
-  { imageSrc: "/media-14.png", imageAlt: "Image 14" },
-  { imageSrc: "/media-15.png", imageAlt: "Image 15" },
-  { imageSrc: "/media-16.png", imageAlt: "Image 16" },
-  { imageSrc: "/media-17.png", imageAlt: "Image 17" },
-  { imageSrc: "/media-18.png", imageAlt: "Image 18" },
-  { imageSrc: "/media-19.png", imageAlt: "Image 19" },
-  { imageSrc: "/media-20.png", imageAlt: "Image 20" },
+  {
+    imageSrc: "/work-highlights/work-highlight-01.png",
+    imageAlt: "Podcast discovery platform value section",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-02.png",
+    imageAlt: "Buzz marketing agency hero landing page",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-03.png",
+    imageAlt: "Creelab creator dashboard",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-04.png",
+    imageAlt: "Character profile status card UI",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-05.png",
+    imageAlt: "Tanahub onboarding welcome screen",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-06.png",
+    imageAlt: "Build Web3 education platform hero",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-07.png",
+    imageAlt: "Ulala e-commerce product page",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-08.png",
+    imageAlt: "Nebula Ship spaceship dashboard",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-09.png",
+    imageAlt: "Strea live streaming platform dashboard",
+  },
+  {
+    imageSrc: "/work-highlights/work-highlight-10.png",
+    imageAlt: "Gaming map search and events dashboard",
+  },
 ] as const;
 
 export const servicesSection = {
@@ -294,7 +314,7 @@ export const features = [
   {
     title: "We start with the why",
     description:
-      "What are you making, who is it for, and why now? We ask first — otherwise we're just decorating a guess.",
+      "Who it's for and why now. We ask first — before pixels, not after.",
     model: {
       src: "/models/magnifying_glass.glb",
       motion: "float",
@@ -305,7 +325,7 @@ export const features = [
   {
     title: "We cut it down to size",
     description:
-      "Big vision is welcome. A bloated first launch is not — we help you ship what matters on day one.",
+      "Big vision welcome. Bloated v1 isn't — we ship what matters on day one.",
     model: {
       src: "/models/anatomical_eye_ball.glb",
       motion: "watch",
@@ -315,7 +335,7 @@ export const features = [
   {
     title: "You react before it's final",
     description:
-      "You see drafts early, while we can still change our minds — not a polished reveal that misses the point.",
+      "Early drafts, not polished reveals — feedback while change is still cheap.",
     model: {
       src: "/models/folder.glb",
       motion: "float",
@@ -327,19 +347,19 @@ export const features = [
   {
     title: "We build, not just draw",
     description:
-      "Every product needs something different. We pick the approach that fits yours — fast to ship, reliable to run, easy to grow.",
+      "We pick what fits your product — fast to ship, reliable to run.",
     visual: "fallingBlocks",
   },
   {
     title: "We keep you posted",
     description:
-      "You'll hear from us when it matters. If something's off or we need a call, we say so — no guessing games.",
+      "Updates when they matter. If we need you, we say so — no guessing.",
     visual: "phoneChat",
   },
   {
     title: "Launch isn't goodbye",
     description:
-      "Once it's live, we fix what breaks, adjust what feels wrong, and grow it when you're ready for more.",
+      "After launch, we fix, refine, and grow it when you're ready.",
     model: {
       src: "/models/house_palm_plant.glb",
       motion: "float",
@@ -455,7 +475,7 @@ export const ctaBanner = {
 
 export const socials = [
   { label: "Email", href: `mailto:${site.email}` },
-  { label: "LinkedIn", href: "https://linkedin.com" },
+  { label: "Instagram", href: "https://instagram.com" },
   { label: "X", href: "https://x.com" },
   { label: "Behance", href: "https://behance.net" },
 ] as const;
