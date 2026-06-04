@@ -157,6 +157,7 @@ export function Features() {
     )
       return;
 
+    const mobile = isMobileViewport();
     let cachedHorizontalEndX: number | null = null;
     let cachedZoomDistance: number | null = null;
     let cachedZoomFrom: {
@@ -166,6 +167,7 @@ export function Features() {
       height: number;
     } | null = null;
     let featuresScrollTrigger: ScrollTrigger | null = null;
+    let scrollPhase: "horizontal" | "zoom" | null = null;
 
     const readScrollY = () => getAppScrollY() || window.scrollY;
 
@@ -231,6 +233,11 @@ export function Features() {
     measureHorizontalEndX();
 
     const setPinWrapX = gsap.quickSetter(pinWrap, "x", "px");
+    const setPanelTop = gsap.quickSetter(expandPanel, "top", "px");
+    const setPanelLeft = gsap.quickSetter(expandPanel, "left", "px");
+    const setPanelWidth = gsap.quickSetter(expandPanel, "width", "px");
+    const setPanelHeight = gsap.quickSetter(expandPanel, "height", "px");
+    const setPanelRadius = gsap.quickSetter(expandPanel, "borderRadius", "px");
 
     const ctx = gsap.context(() => {
       gsap.set(pinWrap, { x: 0, force3D: true });
@@ -256,11 +263,17 @@ export function Features() {
         gsap.set(lastCardText, { opacity: 1, visibility: "visible" });
       };
 
-      const resetFeaturesScrollState = () => {
-        setPinWrapX(0);
+      const hideExpandPanel = () => {
         gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
         gsap.set(expandPanel, { opacity: 0 });
         expandPanel.classList.remove("features-expand-content-visible");
+      };
+
+      const resetFeaturesScrollState = () => {
+        scrollPhase = null;
+        cachedZoomFrom = null;
+        setPinWrapX(0);
+        hideExpandPanel();
         showLastCardText();
         gsap.set(lastCard, { opacity: 1 });
       };
@@ -272,14 +285,17 @@ export function Features() {
         end: () => `+=${getHorizontalDistance() + getZoomDistance()}`,
         pin: true,
         pinType: "transform",
-        scrub: 0.65,
+        scrub: mobile ? true : 0.65,
         invalidateOnRefresh: true,
-        anticipatePin: 0,
+        anticipatePin: mobile ? 1 : 0,
+        fastScrollEnd: mobile,
         onEnter: resetFeaturesScrollState,
+        onLeave: resetFeaturesScrollState,
         onLeaveBack: resetFeaturesScrollState,
         onRefresh() {
           cachedHorizontalEndX = null;
           cachedZoomFrom = null;
+          scrollPhase = null;
           measureHorizontalEndX();
         },
         onUpdate(self) {
@@ -292,50 +308,59 @@ export function Features() {
           const sectionH = pinSection.offsetHeight;
 
           if (progress < hEnd) {
-            cachedZoomFrom = null;
             const hProgress = hEnd > 0 ? progress / hEnd : 0;
             const easedH = gsap.parseEase("power2.out")(hProgress);
             setPinWrapX(getHorizontalEndX() * easedH);
-            gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
-            gsap.set(expandPanel, { opacity: 0 });
-            expandPanel.classList.remove("features-expand-content-visible");
-            showLastCardText();
-            gsap.set(lastCard, { opacity: 1 });
+
+            if (scrollPhase !== "horizontal") {
+              scrollPhase = "horizontal";
+              cachedZoomFrom = null;
+              hideExpandPanel();
+              showLastCardText();
+              gsap.set(lastCard, { opacity: 1 });
+            }
             return;
           }
 
           setPinWrapX(getHorizontalEndX());
+
+          if (scrollPhase !== "zoom") {
+            scrollPhase = "zoom";
+            cachedZoomFrom = null;
+            getZoomFromBounds();
+            hideLastCardText();
+            gsap.set(lastCard, { opacity: 0 });
+            gsap.set(expandContainer, { opacity: 1, pointerEvents: "none" });
+          }
 
           const zProgress =
             progress >= 1 ? 1 : (progress - hEnd) / (1 - hEnd);
           const t = gsap.parseEase("power2.inOut")(zProgress);
           const from = getZoomFromBounds();
 
-          hideLastCardText();
-          gsap.set(lastCard, { opacity: 0 });
-
-          // Text fades in via CSS after yellow panel is full screen
           const FULLSCREEN_AT = 0.97;
           expandPanel.classList.toggle(
             "features-expand-content-visible",
             zProgress >= FULLSCREEN_AT,
           );
 
-          gsap.set(expandContainer, {
-            opacity: 1,
-            pointerEvents: zProgress >= 1 ? "auto" : "none",
-          });
+          if (zProgress >= 1) {
+            expandContainer.style.pointerEvents = "auto";
+          } else {
+            expandContainer.style.pointerEvents = "none";
+          }
 
-          gsap.set(expandPanel, {
-            opacity: 1,
-            top: gsap.utils.interpolate(from.top, 0, t),
-            left: gsap.utils.interpolate(from.left, 0, t),
-            width: gsap.utils.interpolate(from.width, sectionW, t),
-            height: gsap.utils.interpolate(from.height, sectionH, t),
-            borderRadius: 24 * (1 - t),
-            backgroundColor: gsap.utils.interpolate(CARD_BG, EXPAND_BG, t),
-          });
-
+          gsap.set(expandPanel, { opacity: 1 });
+          setPanelTop(gsap.utils.interpolate(from.top, 0, t));
+          setPanelLeft(gsap.utils.interpolate(from.left, 0, t));
+          setPanelWidth(gsap.utils.interpolate(from.width, sectionW, t));
+          setPanelHeight(gsap.utils.interpolate(from.height, sectionH, t));
+          setPanelRadius(24 * (1 - t));
+          expandPanel.style.backgroundColor = gsap.utils.interpolate(
+            CARD_BG,
+            EXPAND_BG,
+            t,
+          ) as string;
         },
       });
     }, pinSection);
@@ -344,7 +369,13 @@ export function Features() {
       cachedHorizontalEndX = null;
       cachedZoomDistance = null;
       cachedZoomFrom = null;
+      scrollPhase = null;
       measureHorizontalEndX();
+
+      if (mobile && !force) {
+        updateScrollTriggers();
+        return;
+      }
 
       if (!force && !isBeforeFeatures()) {
         updateScrollTriggers();
@@ -361,7 +392,7 @@ export function Features() {
       }
       layoutRefreshTimer = window.setTimeout(() => {
         layoutRefreshTimer = undefined;
-        if (isMobileViewport()) {
+        if (mobile) {
           refresh(force);
           return;
         }
@@ -369,8 +400,8 @@ export function Features() {
       }, 200);
     };
 
-    const initialRefreshTimers = [600, 1400, 2600].map((ms) =>
-      window.setTimeout(() => scheduleLayoutRefresh(true), ms),
+    const initialRefreshTimers = (mobile ? [800] : [600, 1400, 2600]).map(
+      (ms) => window.setTimeout(() => scheduleLayoutRefresh(true), ms),
     );
 
     const getPrecedingSections = () => {
@@ -394,7 +425,9 @@ export function Features() {
     const precedingSections = getPrecedingSections();
     let lastPrecedingHeight = measurePrecedingHeight(precedingSections);
     const sectionResizeObserver =
-      typeof ResizeObserver !== "undefined" && precedingSections.length > 0
+      !mobile &&
+      typeof ResizeObserver !== "undefined" &&
+      precedingSections.length > 0
         ? new ResizeObserver(() => {
             const height = measurePrecedingHeight(precedingSections);
             if (Math.abs(height - lastPrecedingHeight) < 8) return;
@@ -476,7 +509,7 @@ export function Features() {
       >
         <div
           ref={pinWrapRef}
-          className="flex h-full w-max items-center gap-4 pr-8 will-change-transform"
+          className="flex h-full w-max items-center gap-4 pr-8 will-change-transform max-md:[backface-visibility:hidden]"
         >
           <div className="box-border flex min-h-full w-[88vw] max-w-[88vw] min-w-0 shrink-0 flex-col justify-center px-[max(1.25rem,5vw)] md:w-auto md:max-w-none md:min-w-[min(70vw,640px)]">
             <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>
