@@ -3,7 +3,7 @@
 import { useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { features, featuresExpandAbout, featuresSection } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
 import {
@@ -124,6 +124,59 @@ function FeatureCardVisual({
   return null;
 }
 
+function FeaturesStaticLayout() {
+  return (
+    <section id="features" className="anchor-offset section-padding">
+      <div className="container-wide">
+        <div className="mb-12 md:mb-16">
+          <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>
+          <FeaturesSectionTitle />
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature) => {
+            const fullBleed = isFullBleedVisual(feature);
+
+            return (
+              <article key={feature.title} className="flex flex-col">
+                <div
+                  className={`flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-3xl bg-hero-bg md:min-h-64 ${fullBleed ? "p-0" : "p-6 md:p-8"}`}
+                >
+                  <FeatureCardVisual
+                    feature={feature}
+                    modelClassName="h-full min-h-[12rem] w-full"
+                  />
+                </div>
+                <div className="mt-4 shrink-0">
+                  <h3
+                    className={`${FEATURES_HEADING_CLASS} mb-2 text-lg md:text-xl`}
+                  >
+                    {feature.title}
+                  </h3>
+                  <p className="line-clamp-2 text-sm leading-relaxed text-muted">
+                    {feature.description}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="features-expand-panel features-expand-content-visible mt-10 flex flex-col justify-end gap-4 overflow-hidden rounded-3xl bg-[#ffca26] p-6 sm:gap-5 sm:p-8">
+          <div className="shrink-0" data-features-expand-header>
+            <h2
+              className={`${tiltWarp.className} max-w-2xl text-features-expand-accent text-[clamp(2.125rem,9vw,3rem)] leading-[1.06]`}
+            >
+              <span className="block">{featuresExpandAbout.titleLine1}</span>
+              <span className="block">{featuresExpandAbout.titleLine2}</span>
+            </h2>
+          </div>
+          <FeaturesExpandText />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function Features() {
   const pinSectionRef = useRef<HTMLDivElement>(null);
   const pinWrapRef = useRef<HTMLDivElement>(null);
@@ -134,8 +187,24 @@ export function Features() {
   const expandHeaderRef = useRef<HTMLDivElement>(null);
   const expandTextRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const [pinnedScroll, setPinnedScroll] = useState(false);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) {
+      setPinnedScroll(false);
+      return;
+    }
+
+    const desktopMq = window.matchMedia("(min-width: 768px)");
+    const sync = () => setPinnedScroll(desktopMq.matches);
+    sync();
+    desktopMq.addEventListener("change", sync);
+    return () => desktopMq.removeEventListener("change", sync);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
+    if (!pinnedScroll) return;
+
     const pinSection = pinSectionRef.current;
     const pinWrap = pinWrapRef.current;
     const lastCard = lastCardRef.current;
@@ -152,12 +221,9 @@ export function Features() {
       !expandContainer ||
       !expandPanel ||
       !expandHeader ||
-      !expandText ||
-      prefersReducedMotion
+      !expandText
     )
       return;
-
-    const mobile = isMobileViewport();
     let cachedHorizontalEndX: number | null = null;
     let cachedZoomDistance: number | null = null;
     let cachedZoomFrom: {
@@ -285,10 +351,9 @@ export function Features() {
         end: () => `+=${getHorizontalDistance() + getZoomDistance()}`,
         pin: true,
         pinType: "transform",
-        scrub: mobile ? true : 0.65,
+        scrub: 0.65,
         invalidateOnRefresh: true,
-        anticipatePin: mobile ? 1 : 0,
-        fastScrollEnd: mobile,
+        anticipatePin: 0,
         onEnter: resetFeaturesScrollState,
         onLeave: resetFeaturesScrollState,
         onLeaveBack: resetFeaturesScrollState,
@@ -372,11 +437,6 @@ export function Features() {
       scrollPhase = null;
       measureHorizontalEndX();
 
-      if (mobile && !force) {
-        updateScrollTriggers();
-        return;
-      }
-
       if (!force && !isBeforeFeatures()) {
         updateScrollTriggers();
         return;
@@ -392,7 +452,7 @@ export function Features() {
       }
       layoutRefreshTimer = window.setTimeout(() => {
         layoutRefreshTimer = undefined;
-        if (mobile) {
+        if (isMobileViewport()) {
           refresh(force);
           return;
         }
@@ -400,8 +460,8 @@ export function Features() {
       }, 200);
     };
 
-    const initialRefreshTimers = (mobile ? [800] : [600, 1400, 2600]).map(
-      (ms) => window.setTimeout(() => scheduleLayoutRefresh(true), ms),
+    const initialRefreshTimers = [600, 1400, 2600].map((ms) =>
+      window.setTimeout(() => scheduleLayoutRefresh(true), ms),
     );
 
     const getPrecedingSections = () => {
@@ -425,9 +485,7 @@ export function Features() {
     const precedingSections = getPrecedingSections();
     let lastPrecedingHeight = measurePrecedingHeight(precedingSections);
     const sectionResizeObserver =
-      !mobile &&
-      typeof ResizeObserver !== "undefined" &&
-      precedingSections.length > 0
+      typeof ResizeObserver !== "undefined" && precedingSections.length > 0
         ? new ResizeObserver(() => {
             const height = measurePrecedingHeight(precedingSections);
             if (Math.abs(height - lastPrecedingHeight) < 8) return;
@@ -462,43 +520,14 @@ export function Features() {
       pinSection.classList.remove("features-is-zooming");
       ctx.revert();
     };
-  }, [prefersReducedMotion]);
+  }, [pinnedScroll]);
 
-  if (prefersReducedMotion) {
-    return (
-      <section id="features" className="anchor-offset section-padding">
-        <div className="container-wide">
-          <div className="mb-12 md:mb-16">
-            <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>
-            <FeaturesSectionTitle />
-          </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => {
-              const fullBleed = isFullBleedVisual(feature);
+  useEffect(() => {
+    refreshScrollTriggersPreservingScroll({ required: true });
+  }, [pinnedScroll]);
 
-              return (
-              <article key={feature.title} className="flex flex-col">
-                <div className={`flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-3xl bg-hero-bg md:min-h-64 ${fullBleed ? "p-0" : "p-6 md:p-8"}`}>
-                  <FeatureCardVisual
-                    feature={feature}
-                    modelClassName="h-full min-h-[12rem] w-full"
-                  />
-                </div>
-                <div className="mt-4 shrink-0">
-                  <h3 className={`${FEATURES_HEADING_CLASS} mb-2 text-lg md:text-xl`}>
-                    {feature.title}
-                  </h3>
-                  <p className="line-clamp-2 text-sm leading-relaxed text-muted">
-                    {feature.description}
-                  </p>
-                </div>
-              </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-    );
+  if (!pinnedScroll) {
+    return <FeaturesStaticLayout />;
   }
 
   return (
@@ -509,7 +538,7 @@ export function Features() {
       >
         <div
           ref={pinWrapRef}
-          className="flex h-full w-max items-center gap-4 pr-8 will-change-transform max-md:[backface-visibility:hidden]"
+          className="flex h-full w-max items-center gap-4 pr-8 will-change-transform"
         >
           <div className="box-border flex min-h-full w-[88vw] max-w-[88vw] min-w-0 shrink-0 flex-col justify-center px-[max(1.25rem,5vw)] md:w-auto md:max-w-none md:min-w-[min(70vw,640px)]">
             <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>
