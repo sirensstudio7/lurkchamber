@@ -93,6 +93,18 @@ main {
   font-family: "Tilt Warp", var(--font-tilt-warp), sans-serif !important;
 }
 
+@media (max-width: 767px) {
+  #hero h1.text-hero {
+    font-size: clamp(2.125rem, 8vw, 2.625rem);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+  }
+
+  #hero h1.text-hero span.block + span.block {
+    margin-top: 0.2rem;
+  }
+}
+
 .text-display {
   font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 1.1;

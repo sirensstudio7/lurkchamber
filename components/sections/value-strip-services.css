@@ -240,7 +240,11 @@
 
 @media (max-width: 767px) {
   .services-bento__card-surface {
-    min-height: 22rem;
+    min-height: 24rem;
+  }
+
+  .services-bento__card-title {
+    font-size: clamp(1.25rem, 3.5vw, 1.375rem);
   }
 }
 
@@ -261,10 +265,12 @@
   }
 
   .services-panel__title-line {
-    white-space: normal;
+    white-space: nowrap;
   }
 
   .services-panel__title {
     max-width: none;
+    font-size: clamp(2rem, 7.5vw, 2.5rem);
+    line-height: 1.05;
   }
 }

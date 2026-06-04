@@ -100,7 +100,7 @@ export function Hero() {
             className={`${tiltWarp.className} text-hero`}
             style={{ color: HERO_TEXT }}
           >
-            <span className="block">{hero.line1}</span>
+            <span className="block max-md:whitespace-nowrap">{hero.line1}</span>
             <span className="block opacity-90">{hero.line2}</span>
           </motion.h1>
 
@@ -118,11 +118,11 @@ export function Hero() {
 
           <motion.div
             variants={item}
-            className="relative z-40 mt-3 flex items-center justify-center gap-2 md:mt-6"
+            className="relative z-40 mt-8 flex items-center justify-center gap-2 md:mt-6"
           >
             <a
               href={hero.cta.href}
-              className="group inline-flex h-12 shrink-0 items-center overflow-hidden rounded-[43px] bg-hero-foreground px-10 font-[family-name:var(--font-inter)] text-lg font-semibold text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground md:h-14 md:px-12 md:text-xl"
+              className="group inline-flex h-16 shrink-0 items-center overflow-hidden rounded-[43px] bg-hero-foreground px-14 font-[family-name:var(--font-inter)] text-lg font-semibold text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground md:h-14 md:px-12 md:text-xl"
               onClick={() => playPopSound()}
             >
               <CtaSlideLabel label={hero.cta.label} />

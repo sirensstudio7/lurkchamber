@@ -13,30 +13,23 @@ const HERO_EXIT_OFFSET = 160;
 const NAV_THEME_TRANSITION =
   "transition-colors duration-500 ease-in-out motion-reduce:duration-150";
 const NAV_ICON_MORPH =
-  "transition-[top,transform,opacity,scale] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none motion-reduce:duration-150";
+  "origin-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none motion-reduce:duration-150";
 
 function MenuToggleIcon({ open }: { open: boolean }) {
   return (
     <span className="relative block h-[18px] w-[22px]" aria-hidden>
       <span
         className={cn(
-          "absolute left-0 h-[2.5px] w-full origin-center rounded-full bg-current",
+          "absolute left-0 top-1/2 h-[2.5px] w-full -translate-y-1/2 rounded-full bg-current",
           NAV_ICON_MORPH,
-          open ? "top-[7.75px] rotate-45" : "top-0 rotate-0",
+          open ? "translate-y-0 rotate-45" : "-translate-y-[6.25px] rotate-0",
         )}
       />
       <span
         className={cn(
-          "absolute left-0 top-[7.75px] h-[2.5px] w-full origin-center rounded-full bg-current",
+          "absolute left-0 top-1/2 h-[2.5px] w-full -translate-y-1/2 rounded-full bg-current",
           NAV_ICON_MORPH,
-          open ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
-        )}
-      />
-      <span
-        className={cn(
-          "absolute left-0 h-[2.5px] w-full origin-center rounded-full bg-current",
-          NAV_ICON_MORPH,
-          open ? "top-[7.75px] -rotate-45" : "top-[15.5px] rotate-0",
+          open ? "translate-y-0 -rotate-45" : "translate-y-[6.25px] rotate-0",
         )}
       />
     </span>
@@ -252,7 +245,7 @@ export function Header() {
           <a
             href={header.cta.href}
             className={cn(
-              "group mt-2 overflow-hidden rounded-[43px] px-5 py-3 text-center font-[family-name:var(--font-inter)] text-base font-semibold",
+              "group mt-2 flex w-full items-center justify-center overflow-hidden rounded-[43px] px-5 py-3 font-[family-name:var(--font-inter)] text-base font-semibold",
               NAV_THEME_TRANSITION,
               pastHero
                 ? "bg-hero-bg text-white"

@@ -14,7 +14,7 @@ export function CtaBanner() {
         <div className="cta-banner-card relative flex min-h-[min(70dvh,680px)] flex-col items-center justify-center overflow-hidden rounded-3xl bg-black p-8">
           <Reveal className="relative z-10 flex w-full flex-col items-center text-center">
             <h2 className="text-hero text-white">
-              <span className="block text-hero-bg">{ctaBanner.line1}</span>
+              <span className="block text-hero-foreground">{ctaBanner.line1}</span>
               <span className="block text-white">{ctaBanner.line2}</span>
             </h2>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-white md:text-lg">

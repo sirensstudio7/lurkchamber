@@ -3,7 +3,7 @@
 import { useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { features, featuresExpandAbout, featuresSection } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
 import {
@@ -34,6 +34,9 @@ function getViewportHeight() {
 
 const FEATURES_HEADING_CLASS =
   "font-[family-name:var(--font-dm-sans)] font-medium tracking-tight text-foreground";
+
+const FEATURES_CARD_TITLE_CLASS =
+  "mb-2 text-2xl leading-tight md:mb-3 md:text-3xl";
 
 function FeaturesSectionTitle() {
   return (
@@ -124,59 +127,6 @@ function FeatureCardVisual({
   return null;
 }
 
-function FeaturesStaticLayout() {
-  return (
-    <section id="features" className="anchor-offset section-padding">
-      <div className="container-wide">
-        <div className="mb-12 md:mb-16">
-          <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>
-          <FeaturesSectionTitle />
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => {
-            const fullBleed = isFullBleedVisual(feature);
-
-            return (
-              <article key={feature.title} className="flex flex-col">
-                <div
-                  className={`flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-3xl bg-hero-bg md:min-h-64 ${fullBleed ? "p-0" : "p-6 md:p-8"}`}
-                >
-                  <FeatureCardVisual
-                    feature={feature}
-                    modelClassName="h-full min-h-[12rem] w-full"
-                  />
-                </div>
-                <div className="mt-4 shrink-0">
-                  <h3
-                    className={`${FEATURES_HEADING_CLASS} mb-2 text-lg md:text-xl`}
-                  >
-                    {feature.title}
-                  </h3>
-                  <p className="line-clamp-2 text-sm leading-relaxed text-muted">
-                    {feature.description}
-                  </p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-
-        <div className="features-expand-panel features-expand-content-visible mt-10 flex flex-col justify-end gap-4 overflow-hidden rounded-3xl bg-[#ffca26] p-6 sm:gap-5 sm:p-8">
-          <div className="shrink-0" data-features-expand-header>
-            <h2
-              className={`${tiltWarp.className} max-w-2xl text-features-expand-accent text-[clamp(2.125rem,9vw,3rem)] leading-[1.06]`}
-            >
-              <span className="block">{featuresExpandAbout.titleLine1}</span>
-              <span className="block">{featuresExpandAbout.titleLine2}</span>
-            </h2>
-          </div>
-          <FeaturesExpandText />
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function Features() {
   const pinSectionRef = useRef<HTMLDivElement>(null);
   const pinWrapRef = useRef<HTMLDivElement>(null);
@@ -187,24 +137,8 @@ export function Features() {
   const expandHeaderRef = useRef<HTMLDivElement>(null);
   const expandTextRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const [pinnedScroll, setPinnedScroll] = useState(false);
-
-  useLayoutEffect(() => {
-    if (prefersReducedMotion) {
-      setPinnedScroll(false);
-      return;
-    }
-
-    const desktopMq = window.matchMedia("(min-width: 768px)");
-    const sync = () => setPinnedScroll(desktopMq.matches);
-    sync();
-    desktopMq.addEventListener("change", sync);
-    return () => desktopMq.removeEventListener("change", sync);
-  }, [prefersReducedMotion]);
 
   useEffect(() => {
-    if (!pinnedScroll) return;
-
     const pinSection = pinSectionRef.current;
     const pinWrap = pinWrapRef.current;
     const lastCard = lastCardRef.current;
@@ -221,19 +155,14 @@ export function Features() {
       !expandContainer ||
       !expandPanel ||
       !expandHeader ||
-      !expandText
+      !expandText ||
+      prefersReducedMotion
     )
       return;
+
     let cachedHorizontalEndX: number | null = null;
     let cachedZoomDistance: number | null = null;
-    let cachedZoomFrom: {
-      top: number;
-      left: number;
-      width: number;
-      height: number;
-    } | null = null;
     let featuresScrollTrigger: ScrollTrigger | null = null;
-    let scrollPhase: "horizontal" | "zoom" | null = null;
 
     const readScrollY = () => getAppScrollY() || window.scrollY;
 
@@ -290,20 +219,9 @@ export function Features() {
       };
     };
 
-    const getZoomFromBounds = () => {
-      if (cachedZoomFrom) return cachedZoomFrom;
-      cachedZoomFrom = getCardBoundsInSection();
-      return cachedZoomFrom;
-    };
-
     measureHorizontalEndX();
 
     const setPinWrapX = gsap.quickSetter(pinWrap, "x", "px");
-    const setPanelTop = gsap.quickSetter(expandPanel, "top", "px");
-    const setPanelLeft = gsap.quickSetter(expandPanel, "left", "px");
-    const setPanelWidth = gsap.quickSetter(expandPanel, "width", "px");
-    const setPanelHeight = gsap.quickSetter(expandPanel, "height", "px");
-    const setPanelRadius = gsap.quickSetter(expandPanel, "borderRadius", "px");
 
     const ctx = gsap.context(() => {
       gsap.set(pinWrap, { x: 0, force3D: true });
@@ -329,17 +247,11 @@ export function Features() {
         gsap.set(lastCardText, { opacity: 1, visibility: "visible" });
       };
 
-      const hideExpandPanel = () => {
+      const resetFeaturesScrollState = () => {
+        setPinWrapX(0);
         gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
         gsap.set(expandPanel, { opacity: 0 });
         expandPanel.classList.remove("features-expand-content-visible");
-      };
-
-      const resetFeaturesScrollState = () => {
-        scrollPhase = null;
-        cachedZoomFrom = null;
-        setPinWrapX(0);
-        hideExpandPanel();
         showLastCardText();
         gsap.set(lastCard, { opacity: 1 });
       };
@@ -355,12 +267,9 @@ export function Features() {
         invalidateOnRefresh: true,
         anticipatePin: 0,
         onEnter: resetFeaturesScrollState,
-        onLeave: resetFeaturesScrollState,
         onLeaveBack: resetFeaturesScrollState,
         onRefresh() {
           cachedHorizontalEndX = null;
-          cachedZoomFrom = null;
-          scrollPhase = null;
           measureHorizontalEndX();
         },
         onUpdate(self) {
@@ -376,56 +285,46 @@ export function Features() {
             const hProgress = hEnd > 0 ? progress / hEnd : 0;
             const easedH = gsap.parseEase("power2.out")(hProgress);
             setPinWrapX(getHorizontalEndX() * easedH);
-
-            if (scrollPhase !== "horizontal") {
-              scrollPhase = "horizontal";
-              cachedZoomFrom = null;
-              hideExpandPanel();
-              showLastCardText();
-              gsap.set(lastCard, { opacity: 1 });
-            }
+            gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
+            gsap.set(expandPanel, { opacity: 0 });
+            expandPanel.classList.remove("features-expand-content-visible");
+            showLastCardText();
+            gsap.set(lastCard, { opacity: 1 });
             return;
           }
 
           setPinWrapX(getHorizontalEndX());
 
-          if (scrollPhase !== "zoom") {
-            scrollPhase = "zoom";
-            cachedZoomFrom = null;
-            getZoomFromBounds();
-            hideLastCardText();
-            gsap.set(lastCard, { opacity: 0 });
-            gsap.set(expandContainer, { opacity: 1, pointerEvents: "none" });
-          }
-
           const zProgress =
             progress >= 1 ? 1 : (progress - hEnd) / (1 - hEnd);
           const t = gsap.parseEase("power2.inOut")(zProgress);
-          const from = getZoomFromBounds();
+          const from = getCardBoundsInSection();
 
+          hideLastCardText();
+          gsap.set(lastCard, { opacity: 0 });
+
+          // Text fades in via CSS after yellow panel is full screen
           const FULLSCREEN_AT = 0.97;
           expandPanel.classList.toggle(
             "features-expand-content-visible",
             zProgress >= FULLSCREEN_AT,
           );
 
-          if (zProgress >= 1) {
-            expandContainer.style.pointerEvents = "auto";
-          } else {
-            expandContainer.style.pointerEvents = "none";
-          }
+          gsap.set(expandContainer, {
+            opacity: 1,
+            pointerEvents: zProgress >= 1 ? "auto" : "none",
+          });
 
-          gsap.set(expandPanel, { opacity: 1 });
-          setPanelTop(gsap.utils.interpolate(from.top, 0, t));
-          setPanelLeft(gsap.utils.interpolate(from.left, 0, t));
-          setPanelWidth(gsap.utils.interpolate(from.width, sectionW, t));
-          setPanelHeight(gsap.utils.interpolate(from.height, sectionH, t));
-          setPanelRadius(24 * (1 - t));
-          expandPanel.style.backgroundColor = gsap.utils.interpolate(
-            CARD_BG,
-            EXPAND_BG,
-            t,
-          ) as string;
+          gsap.set(expandPanel, {
+            opacity: 1,
+            top: gsap.utils.interpolate(from.top, 0, t),
+            left: gsap.utils.interpolate(from.left, 0, t),
+            width: gsap.utils.interpolate(from.width, sectionW, t),
+            height: gsap.utils.interpolate(from.height, sectionH, t),
+            borderRadius: 24 * (1 - t),
+            backgroundColor: gsap.utils.interpolate(CARD_BG, EXPAND_BG, t),
+          });
+
         },
       });
     }, pinSection);
@@ -433,8 +332,6 @@ export function Features() {
     const refresh = (force = false) => {
       cachedHorizontalEndX = null;
       cachedZoomDistance = null;
-      cachedZoomFrom = null;
-      scrollPhase = null;
       measureHorizontalEndX();
 
       if (!force && !isBeforeFeatures()) {
@@ -520,14 +417,43 @@ export function Features() {
       pinSection.classList.remove("features-is-zooming");
       ctx.revert();
     };
-  }, [pinnedScroll]);
+  }, [prefersReducedMotion]);
 
-  useEffect(() => {
-    refreshScrollTriggersPreservingScroll({ required: true });
-  }, [pinnedScroll]);
+  if (prefersReducedMotion) {
+    return (
+      <section id="features" className="anchor-offset section-padding">
+        <div className="container-wide">
+          <div className="mb-12 md:mb-16">
+            <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>
+            <FeaturesSectionTitle />
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature) => {
+              const fullBleed = isFullBleedVisual(feature);
 
-  if (!pinnedScroll) {
-    return <FeaturesStaticLayout />;
+              return (
+              <article key={feature.title} className="flex flex-col">
+                <div className={`flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-3xl bg-hero-bg md:min-h-64 ${fullBleed ? "p-0" : "p-6 md:p-8"}`}>
+                  <FeatureCardVisual
+                    feature={feature}
+                    modelClassName="h-full min-h-[12rem] w-full"
+                  />
+                </div>
+                <div className="mt-4 shrink-0">
+                  <h3 className={`${FEATURES_HEADING_CLASS} ${FEATURES_CARD_TITLE_CLASS}`}>
+                    {feature.title}
+                  </h3>
+                  <p className="line-clamp-2 text-sm leading-relaxed text-muted">
+                    {feature.description}
+                  </p>
+                </div>
+              </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -569,9 +495,7 @@ export function Features() {
                   data-features-last-card-text={isLast ? true : undefined}
                   className="relative mt-4 shrink-0 md:mt-5"
                 >
-                  <h3
-                    className={`${FEATURES_HEADING_CLASS} mb-2 text-lg md:mb-3 md:text-xl`}
-                  >
+                  <h3 className={`${FEATURES_HEADING_CLASS} ${FEATURES_CARD_TITLE_CLASS}`}>
                     {feature.title}
                   </h3>
                   <p className="line-clamp-2 text-base leading-relaxed text-muted md:text-lg">
