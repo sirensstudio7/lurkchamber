@@ -49,22 +49,10 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    const useNativeScroll =
-      prefersReducedMotion || isMobileViewport();
-
-    if (useNativeScroll) {
+    if (prefersReducedMotion) {
       setLenisInstance(null);
       ScrollTrigger.scrollerProxy(document.documentElement, {});
       ScrollTrigger.defaults({ scroller: document.documentElement });
-
-      const normalizeScroll =
-        isMobileViewport() && !prefersReducedMotion
-          ? ScrollTrigger.normalizeScroll({
-              allowNestedScroll: true,
-              momentum: (velocity: number) =>
-                Math.min(3, Math.abs(velocity) / 1000),
-            })
-          : null;
 
       const onScroll = () => {
         setAppScrollY(window.scrollY);
@@ -73,22 +61,26 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       };
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
-      refreshScrollTriggersPreservingScroll({ required: true });
 
       return () => {
         mobileMq.removeEventListener("change", onViewportModeChange);
         window.removeEventListener("scroll", onScroll);
-        normalizeScroll?.kill();
         ScrollTrigger.scrollerProxy(document.documentElement, {});
         ScrollTrigger.defaults({ scroller: window });
         setLenisInstance(null);
       };
     }
 
+    const mobile = isMobileViewport();
+
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: mobile ? 1.05 : 1.2,
+      lerp: mobile ? 0.12 : 0.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
+      smoothWheel: !mobile,
+      syncTouch: mobile,
+      syncTouchLerp: mobile ? 0.1 : undefined,
+      touchInertiaExponent: mobile ? 1.5 : undefined,
       allowNestedScroll: true,
     });
     setLenisInstance(lenis);

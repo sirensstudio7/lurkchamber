@@ -273,7 +273,7 @@ export function Features() {
         end: () => `+=${getHorizontalDistance() + getZoomDistance()}`,
         pin: true,
         pinType: "transform",
-        scrub: mobile ? true : 0.65,
+        scrub: mobile ? 0.35 : 0.65,
         invalidateOnRefresh: true,
         anticipatePin: mobile ? 1 : 0,
         onEnter: resetFeaturesScrollState,
