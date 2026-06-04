@@ -157,8 +157,15 @@ export function Features() {
     )
       return;
 
+    const mobile = isMobileViewport();
     let cachedHorizontalEndX: number | null = null;
     let cachedZoomDistance: number | null = null;
+    let cachedZoomFrom: {
+      top: number;
+      left: number;
+      width: number;
+      height: number;
+    } | null = null;
     let featuresScrollTrigger: ScrollTrigger | null = null;
 
     const readScrollY = () => getAppScrollY() || window.scrollY;
@@ -216,6 +223,12 @@ export function Features() {
       };
     };
 
+    const getZoomFromBounds = () => {
+      if (cachedZoomFrom) return cachedZoomFrom;
+      cachedZoomFrom = getCardBoundsInSection();
+      return cachedZoomFrom;
+    };
+
     measureHorizontalEndX();
 
     const setPinWrapX = gsap.quickSetter(pinWrap, "x", "px");
@@ -260,13 +273,14 @@ export function Features() {
         end: () => `+=${getHorizontalDistance() + getZoomDistance()}`,
         pin: true,
         pinType: "transform",
-        scrub: 0.65,
+        scrub: mobile ? true : 0.65,
         invalidateOnRefresh: true,
-        anticipatePin: 0,
+        anticipatePin: mobile ? 1 : 0,
         onEnter: resetFeaturesScrollState,
         onLeaveBack: resetFeaturesScrollState,
         onRefresh() {
           cachedHorizontalEndX = null;
+          cachedZoomFrom = null;
           measureHorizontalEndX();
         },
         onUpdate(self) {
@@ -279,6 +293,7 @@ export function Features() {
           const sectionH = pinSection.offsetHeight;
 
           if (progress < hEnd) {
+            cachedZoomFrom = null;
             const hProgress = hEnd > 0 ? progress / hEnd : 0;
             const easedH = gsap.parseEase("power2.out")(hProgress);
             setPinWrapX(getHorizontalEndX() * easedH);
@@ -295,7 +310,7 @@ export function Features() {
           const zProgress =
             progress >= 1 ? 1 : (progress - hEnd) / (1 - hEnd);
           const t = gsap.parseEase("power2.inOut")(zProgress);
-          const from = getCardBoundsInSection();
+          const from = getZoomFromBounds();
 
           hideLastCardText();
           gsap.set(lastCard, { opacity: 0 });
@@ -329,7 +344,13 @@ export function Features() {
     const refresh = (force = false) => {
       cachedHorizontalEndX = null;
       cachedZoomDistance = null;
+      cachedZoomFrom = null;
       measureHorizontalEndX();
+
+      if (mobile && !force) {
+        updateScrollTriggers();
+        return;
+      }
 
       if (!force && !isBeforeFeatures()) {
         updateScrollTriggers();
@@ -346,7 +367,7 @@ export function Features() {
       }
       layoutRefreshTimer = window.setTimeout(() => {
         layoutRefreshTimer = undefined;
-        if (isMobileViewport()) {
+        if (mobile) {
           refresh(force);
           return;
         }
@@ -379,7 +400,9 @@ export function Features() {
     const precedingSections = getPrecedingSections();
     let lastPrecedingHeight = measurePrecedingHeight(precedingSections);
     const sectionResizeObserver =
-      typeof ResizeObserver !== "undefined" && precedingSections.length > 0
+      !mobile &&
+      typeof ResizeObserver !== "undefined" &&
+      precedingSections.length > 0
         ? new ResizeObserver(() => {
             const height = measurePrecedingHeight(precedingSections);
             if (Math.abs(height - lastPrecedingHeight) < 8) return;
@@ -461,7 +484,7 @@ export function Features() {
       >
         <div
           ref={pinWrapRef}
-          className="flex h-full w-max items-center gap-4 pr-8 will-change-transform"
+          className="flex h-full w-max items-center gap-4 pr-8 max-md:[will-change:auto] md:will-change-transform"
         >
           <div className="box-border flex min-h-full w-[88vw] max-w-[88vw] min-w-0 shrink-0 flex-col justify-center px-[max(1.25rem,5vw)] md:w-auto md:max-w-none md:min-w-[min(70vw,640px)]">
             <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>

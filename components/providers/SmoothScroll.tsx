@@ -49,8 +49,23 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    if (prefersReducedMotion) {
+    const useNativeScroll =
+      prefersReducedMotion || isMobileViewport();
+
+    if (useNativeScroll) {
       setLenisInstance(null);
+      ScrollTrigger.scrollerProxy(document.documentElement, {});
+      ScrollTrigger.defaults({ scroller: document.documentElement });
+
+      const normalizeScroll =
+        isMobileViewport() && !prefersReducedMotion
+          ? ScrollTrigger.normalizeScroll({
+              allowNestedScroll: true,
+              momentum: (velocity: number) =>
+                Math.min(3, Math.abs(velocity) / 1000),
+            })
+          : null;
+
       const onScroll = () => {
         setAppScrollY(window.scrollY);
         ScrollTrigger.update();
@@ -58,9 +73,14 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       };
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
+      refreshScrollTriggersPreservingScroll({ required: true });
+
       return () => {
         mobileMq.removeEventListener("change", onViewportModeChange);
         window.removeEventListener("scroll", onScroll);
+        normalizeScroll?.kill();
+        ScrollTrigger.scrollerProxy(document.documentElement, {});
+        ScrollTrigger.defaults({ scroller: window });
         setLenisInstance(null);
       };
     }

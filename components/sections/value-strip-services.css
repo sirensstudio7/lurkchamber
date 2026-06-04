@@ -238,6 +238,12 @@
   }
 }
 
+@media (max-width: 767px) {
+  .services-bento__card-surface {
+    min-height: 22rem;
+  }
+}
+
 @media (max-width: 1023px) {
   .services-panel__header {
     flex-direction: column;
