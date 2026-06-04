@@ -5,6 +5,12 @@ import "./value-strip-services.css";
 
 type Service = (typeof services)[number];
 
+type ServiceCardSurfaceStyle = CSSProperties & {
+  "--service-card-image"?: string;
+  "--service-card-surface-bg"?: string;
+  "--service-card-surface-fg"?: string;
+};
+
 /** Tall left, wide top-right, two squares on row two */
 const BENTO_LAYOUT = [
   "services-bento__card--tall-left",
@@ -34,7 +40,7 @@ function ServiceBentoCard({
       ? "services-bento__card-surface services-bento__card-surface--accent"
       : "services-bento__card-surface";
 
-  const surfaceStyle: CSSProperties | undefined = cardBackgroundSrc
+  const surfaceStyle: ServiceCardSurfaceStyle | undefined = cardBackgroundSrc
     ? { "--service-card-image": `url(${cardBackgroundSrc})` }
     : cardSurfaceBg
       ? {
