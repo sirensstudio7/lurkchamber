@@ -215,7 +215,10 @@ export function Features() {
 
     measureHorizontalEndX();
 
+    const setPinWrapX = gsap.quickSetter(pinWrap, "x", "px");
+
     const ctx = gsap.context(() => {
+      gsap.set(pinWrap, { x: 0, force3D: true });
       gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
       gsap.set(expandPanel, { opacity: 0 });
       expandPanel.classList.remove("features-expand-content-visible");
@@ -238,15 +241,27 @@ export function Features() {
         gsap.set(lastCardText, { opacity: 1, visibility: "visible" });
       };
 
+      const resetFeaturesScrollState = () => {
+        setPinWrapX(0);
+        gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
+        gsap.set(expandPanel, { opacity: 0 });
+        expandPanel.classList.remove("features-expand-content-visible");
+        showLastCardText();
+        gsap.set(lastCard, { opacity: 1 });
+      };
+
       featuresScrollTrigger = ScrollTrigger.create({
         trigger: pinSection,
         scroller: document.documentElement,
         start: "top top",
         end: () => `+=${getHorizontalDistance() + getZoomDistance()}`,
         pin: true,
-        scrub: true,
+        pinType: "transform",
+        scrub: 0.65,
         invalidateOnRefresh: true,
-        anticipatePin: 1,
+        anticipatePin: 0,
+        onEnter: resetFeaturesScrollState,
+        onLeaveBack: resetFeaturesScrollState,
         onRefresh() {
           cachedHorizontalEndX = null;
           measureHorizontalEndX();
@@ -262,7 +277,8 @@ export function Features() {
 
           if (progress < hEnd) {
             const hProgress = hEnd > 0 ? progress / hEnd : 0;
-            gsap.set(pinWrap, { x: getHorizontalEndX() * hProgress });
+            const easedH = gsap.parseEase("power2.out")(hProgress);
+            setPinWrapX(getHorizontalEndX() * easedH);
             gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
             gsap.set(expandPanel, { opacity: 0 });
             expandPanel.classList.remove("features-expand-content-visible");
@@ -271,7 +287,7 @@ export function Features() {
             return;
           }
 
-          gsap.set(pinWrap, { x: getHorizontalEndX() });
+          setPinWrapX(getHorizontalEndX());
 
           const zProgress =
             progress >= 1 ? 1 : (progress - hEnd) / (1 - hEnd);

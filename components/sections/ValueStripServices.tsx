@@ -1,20 +1,8 @@
-"use client";
-
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
 import { services, servicesSection } from "@/lib/content";
 import { tiltWarp } from "@/lib/fonts";
-import { scheduleLayoutStable } from "@/lib/layout-stable";
 import { ValueStripLayoutSync } from "@/components/sections/ValueStripLayoutSync";
 import "./value-strip-services.css";
-
-gsap.registerPlugin(ScrollTrigger);
-
-const STACK_PIN_OFFSET_MEDIA = "(min-width: 768px)";
-const STACK_PIN_BASE_DESKTOP = 136;
-const STACK_PIN_BASE_MOBILE = 112;
 
 type Service = (typeof services)[number];
 
@@ -54,82 +42,11 @@ function ServiceStackCardContent({
   );
 }
 
-function getStackPinBase() {
-  if (typeof window === "undefined") return STACK_PIN_BASE_DESKTOP;
-  return window.matchMedia(STACK_PIN_OFFSET_MEDIA).matches
-    ? STACK_PIN_BASE_DESKTOP
-    : STACK_PIN_BASE_MOBILE;
-}
-
 export function ValueStripServices() {
-  const stackRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const stack = stackRef.current;
-    if (!stack) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReducedMotion) return;
-
-    let ctx: gsap.Context | null = null;
-
-    const setupStack = () => {
-      ctx?.revert();
-      ctx = null;
-
-      const cards = gsap.utils.toArray<HTMLElement>(
-        stack.querySelectorAll(".services-panel__stack-card"),
-      );
-      if (!cards.length) return;
-
-      const pinBase = getStackPinBase();
-
-      ctx = gsap.context(() => {
-        cards.forEach((card) => {
-          ScrollTrigger.create({
-            trigger: card,
-            start: `top ${pinBase}`,
-            end: "bottom 600",
-            endTrigger: stack,
-            pin: true,
-            anticipatePin: 1,
-          });
-        });
-      }, stack);
-    };
-
-    setupStack();
-
-    const onBreakpointChange = () => {
-      setupStack();
-      scheduleLayoutStable();
-      ScrollTrigger.refresh();
-    };
-
-    const refresh = () => ScrollTrigger.refresh();
-    window.addEventListener("resize", onBreakpointChange);
-    window.addEventListener("load", refresh);
-
-    const ro = new ResizeObserver(() => {
-      scheduleLayoutStable();
-      ScrollTrigger.refresh();
-    });
-    ro.observe(stack);
-
-    return () => {
-      window.removeEventListener("resize", onBreakpointChange);
-      window.removeEventListener("load", refresh);
-      ro.disconnect();
-      ctx?.revert();
-    };
-  }, []);
-
   return (
     <section
       id="services"
-      className="services-section overflow-visible bg-background py-24 md:py-32"
+      className="services-section overflow-visible bg-background pt-24 pb-16 md:pt-32 md:pb-24"
       aria-label="Our services"
     >
       <ValueStripLayoutSync />
@@ -146,7 +63,7 @@ export function ValueStripServices() {
             </h2>
           </header>
 
-          <div ref={stackRef} className="services-panel__stack">
+          <div className="services-panel__stack">
             {services.map((service) => (
               <article
                 key={service.number}

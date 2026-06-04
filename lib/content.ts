@@ -135,8 +135,8 @@ export const clients = {
 
 /** Work highlight images live in public/work-highlights/. */
 export const workHighlightsSection = {
-  title: "Highlight Work",
-  intro: "Selected UI and product work from recent collaborations.",
+  titleLine1: "Exploration Sparks",
+  titleLine2: "Endless Creative Possibilities",
 } as const;
 
 export const workHighlights = [

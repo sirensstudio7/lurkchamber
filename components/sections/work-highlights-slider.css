@@ -70,15 +70,6 @@
 
 .work-highlights-slider--marquee .work-highlights-slider__slide {
   margin-inline: 0;
-  transition: margin var(--highlight-duration) var(--highlight-ease);
-}
-
-.work-highlights-slider--marquee .work-highlights-slider__slide.is-active {
-  margin-inline: var(--highlight-spread);
-}
-
-.work-highlights-slider--marquee .work-highlight-frame {
-  will-change: transform;
 }
 
 .work-highlights-slider__slide.is-active .work-highlight-frame {
@@ -110,11 +101,39 @@
   --slide-side-pad: 1.25rem;
 }
 
+.work-highlights-slider--marquee .work-highlights-slider__marquee-track {
+  --slide-gap: 8px;
+  gap: 8px;
+}
+
+.work-highlights-slider--marquee .work-highlights-slider__slide {
+  --highlight-emphasis: 1;
+}
+
 .work-highlights-slider__marquee-track {
   width: max-content;
   padding-inline: 1rem;
-  padding-block: calc(clamp(340px, 36vw, 420px) * 0.14);
+  padding-block: 0;
+}
+
+.work-highlights-slider__marquee-track--infinite {
   will-change: transform;
+  animation: work-highlights-marquee 55s linear infinite;
+}
+
+.work-highlights-slider--marquee:hover
+  .work-highlights-slider__marquee-track--infinite {
+  animation-play-state: paused;
+}
+
+@keyframes work-highlights-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -122,8 +141,8 @@
     transition: none;
   }
 
-  .work-highlights-slider__marquee-track {
-    transform: none !important;
+  .work-highlights-slider__marquee-track--infinite {
+    animation: none;
   }
 
   .work-highlights-slider__slide.is-active .work-highlight-frame {
@@ -136,9 +155,13 @@
     padding-inline: var(--slide-side-pad);
   }
 
-  .work-highlights-slider__track,
-  .work-highlights-slider__marquee-track {
+  .work-highlights-slider__track {
     --slide-gap: 16px;
+  }
+
+  .work-highlights-slider--marquee .work-highlights-slider__marquee-track {
+    --slide-gap: 8px;
+    gap: 8px;
   }
 
   .work-highlights-slider__slide {
@@ -150,7 +173,7 @@
 
   .work-highlights-slider__marquee-track {
     padding-inline: 0;
-    padding-block: calc(var(--slide-w) * 0.625 * 0.1 + 0.25rem);
+    padding-block: 0;
   }
 
   .work-highlights-slider__track {

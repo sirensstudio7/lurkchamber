@@ -16,11 +16,11 @@ export default function Home() {
         <Hero />
         <About />
         <LogoMarquee />
-        <ValueStrip />
         <ValueStripServices />
         <Features />
         <CaseStudies />
         <FAQ />
+        <ValueStrip />
         <CtaBanner />
       </main>
       <Footer />
