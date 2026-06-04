@@ -1,6 +1,7 @@
 "use client";
 
 import { ctaBanner } from "@/lib/content";
+import { CtaSlideLabel } from "@/components/ui/CtaSlideLabel";
 import { Reveal } from "@/components/ui/Reveal";
 
 export function CtaBanner() {
@@ -22,9 +23,9 @@ export function CtaBanner() {
             </p>
             <a
               href={ctaBanner.cta.href}
-              className="mt-8 inline-flex h-12 shrink-0 items-center rounded-[43px] bg-hero-foreground px-10 font-[family-name:var(--font-inter)] text-lg font-semibold text-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground md:h-14 md:px-12 md:text-xl"
+              className="group mt-8 inline-flex h-12 shrink-0 items-center overflow-hidden rounded-[43px] bg-hero-foreground px-10 font-[family-name:var(--font-inter)] text-lg font-semibold text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground md:h-14 md:px-12 md:text-xl"
             >
-              {ctaBanner.cta.label}
+              <CtaSlideLabel label={ctaBanner.cta.label} />
             </a>
           </Reveal>
         </div>

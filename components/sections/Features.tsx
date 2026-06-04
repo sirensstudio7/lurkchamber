@@ -32,10 +32,13 @@ function getViewportHeight() {
   return window.visualViewport?.height ?? window.innerHeight;
 }
 
+const FEATURES_HEADING_CLASS =
+  "font-[family-name:var(--font-dm-sans)] font-medium tracking-tight text-foreground";
+
 function FeaturesSectionTitle() {
   return (
     <h2
-      className={`${tiltWarp.className} w-full max-w-full text-[clamp(2.4rem,11.25vw,3.15rem)] leading-[1.1] tracking-[-0.02em] md:max-w-xl md:text-hero md:leading-[1.05]`}
+      className={`${FEATURES_HEADING_CLASS} w-full max-w-full text-[clamp(2.4rem,11.25vw,3.15rem)] leading-[1.1] tracking-[-0.02em] md:max-w-xl md:text-[clamp(2.5rem,6vw,4.5rem)] md:leading-[1.05]`}
     >
       <span className="block md:hidden">{featuresSection.titleMobileLine1}</span>
       <span className="block md:hidden">{featuresSection.titleMobileLine2}</span>
@@ -434,7 +437,7 @@ export function Features() {
                   />
                 </div>
                 <div className="mt-4 shrink-0">
-                  <h3 className={`${tiltWarp.className} mb-2 text-lg font-normal tracking-tight text-foreground`}>
+                  <h3 className={`${FEATURES_HEADING_CLASS} mb-2 text-lg md:text-xl`}>
                     {feature.title}
                   </h3>
                   <p className="line-clamp-2 text-sm leading-relaxed text-muted">
@@ -489,7 +492,9 @@ export function Features() {
                   data-features-last-card-text={isLast ? true : undefined}
                   className="relative mt-4 shrink-0 md:mt-5"
                 >
-                  <h3 className={`${tiltWarp.className} mb-2 text-xl font-normal tracking-tight text-foreground md:mb-3 md:text-2xl`}>
+                  <h3
+                    className={`${FEATURES_HEADING_CLASS} mb-2 text-lg md:mb-3 md:text-xl`}
+                  >
                     {feature.title}
                   </h3>
                   <p className="line-clamp-2 text-base leading-relaxed text-muted md:text-lg">

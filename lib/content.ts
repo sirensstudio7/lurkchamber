@@ -66,41 +66,16 @@ export const aboutSection = {
       { type: "word", text: "code" },
       { type: "word", text: "—" },
       { type: "word", text: "building" },
-      {
-        type: "icon",
-        src: "/about/icon-websites.svg",
-        alt: "",
-      },
       { type: "word", text: "websites," },
-      {
-        type: "icon",
-        src: "/about/icon-apps.svg",
-        alt: "",
-      },
       { type: "word", text: "apps," },
       { type: "word", text: "and" },
-      {
-        type: "icon",
-        src: "/about/icon-design.svg",
-        alt: "",
-      },
       { type: "word", text: "digital" },
       { type: "word", text: "products" },
       { type: "word", text: "for" },
     ],
     [
-      {
-        type: "icon",
-        src: "/about/icon-startups.svg",
-        alt: "",
-      },
       { type: "word", text: "founders" },
       { type: "word", text: "and" },
-      {
-        type: "icon",
-        src: "/about/icon-brands.svg",
-        alt: "",
-      },
       { type: "word", text: "brands" },
       { type: "word", text: "who" },
       { type: "word", text: "refuse" },
@@ -112,8 +87,6 @@ export const aboutSection = {
 } as const;
 
 export const clients = {
-  labelLine1: "Trusted by the world's fastest growing startups",
-  labelLine2: "and established brands.",
   logos: [
     {
       name: "Termiz Iqtisodiyot va Servis Universiteti",
@@ -130,6 +103,7 @@ export const clients = {
     { name: "Padel Society HUB", src: "/logos/padel-society-hub.png" },
     { name: "Bridge Media Ent.", src: "/logos/bridge-media.png" },
     { name: "NanoFi", src: "/logos/nanofi.png" },
+    { name: "Core Club Connect", src: "/logos/core-club-connect.png" },
   ],
 } as const;
 
@@ -184,149 +158,102 @@ export const workHighlights = [
 
 export const servicesSection = {
   label: "Our services",
-  titleLine1: "Everything in",
-  titleLine2: "one workflow.",
-  intro:
-    "We offer services that help your business design, ship, and grow online. Tap below to explore.",
+  titleLine1: "From rough idea",
+  titleLine2: "to shipped product.",
+  subtitleLine1: "UI, websites, mobile apps, and illustration.",
+  subtitleLine2: "One team from sketch to launch.",
 } as const;
 
 export const services = [
   {
     number: "01",
-    navTitle: "Websites",
-    title: "Brand websites that feel memorable",
-    description:
-      "Sites with real personality and polish — designed to feel like yours, not a template with your logo dropped in.",
+    navTitle: "UI/UX Design",
+    title: "Interfaces people actually enjoy using",
+    description: "Product UI with clear flows. Considered, not template-built.",
     body: [
-      "A lot of company sites look identical. Same hero, same three column feature grid, same footer packed with links nobody clicks. Before we open Figma, we ask who is visiting and what they need to understand in the first ten seconds.",
-      "Then we sketch the pages that matter for your business. Homepage, work, pricing, hiring, whatever you actually need. Not a sitemap copied from the last client because it looked good in a presentation.",
-      "Type, color, and motion come after structure, not before. You get annotated files, assets exported the way your dev asked for them, and we stay in the thread for the small fixes that only show up on a real phone.",
+      "We start with who is using the product and what they are trying to finish in one session. Screens get sketched around jobs, not around a component library someone liked on Dribbble.",
+      "Wireframes, prototypes, and high-fidelity UI share one system — type, color, spacing, and states — so engineering is not guessing between files.",
+      "You get flows that are easy to test, easy to hand off, and easy to extend when the roadmap adds another feature next month.",
     ],
     imageSrc: "/img-1.png",
-    cardColor: "#0d9f6e",
+    cardBackgroundSrc: "/services/ui-ux-card-bg.png",
+    cardColor: "#5b5bd6",
     cardTextColor: "#ffffff",
     points: [
-      "Custom homepage & inner page layouts",
-      "Responsive design across all breakpoints",
-      "Design system & reusable component library",
-      "Typography, color, and spacing tokens",
-      "Developer-ready Figma handoff & assets",
-      "Launch support & post-ship refinements",
+      "User flows & information architecture",
+      "Wireframes and interactive prototypes",
+      "Design systems & component libraries",
+      "Mobile and web product UI",
+      "Usability-focused layout decisions",
+      "Developer-ready Figma handoff",
     ],
   },
   {
     number: "02",
-    navTitle: "Landing pages",
-    title: "Pages built to convert from day one",
-    description:
-      "High-conversion pages with clear story, sharp visuals, and flows that turn visitors into sign-ups.",
+    navTitle: "Website Development",
+    title: "Fast, polished sites built to last",
+    description: "We build the site too. Clean code, works on phones.",
     body: [
-      "Most landing pages lose people on the first screen. The offer is buried, the headline is vague, and by the third scroll someone already opened another tab.",
-      "We put the story in order. What it is. Why it matters. Proof it works. What to do next. Every section earns its spot. If something is filler, we cut it or say so out loud.",
-      "You leave with a page ready to build. Sections are modular so you can swap a headline or testimonial block after a test without tearing the whole layout apart.",
+      "Design and code stay in the same conversation. No static mockups thrown over a wall to a team that never met the person who drew the hero.",
+      "We ship semantic markup, sensible animations, and stacks your team can maintain — modern frameworks, clean structure, and SEO basics baked in from day one.",
+      "Launch includes the unglamorous work: forms, analytics hooks, redirects, and the fixes that only show up on a real device on slow Wi‑Fi.",
     ],
     imageSrc: "/img-5.png",
-    cardColor: "#5b5bd6",
+    cardSurfaceBg: brand.heroBg,
+    cardSurfaceFg: brand.heroText,
+    cardColor: "#0d9f6e",
     cardTextColor: "#ffffff",
     points: [
-      "Conversion-focused page structure",
-      "Hero, proof, features & CTA sections",
-      "Copy-led layout hierarchy",
-      "Mobile-first responsive layouts",
-      "A/B-ready section variations",
-      "Launch-ready design in weeks, not months",
+      "Marketing and company websites",
+      "Responsive, accessible front-end builds",
+      "CMS and content-driven pages",
+      "Performance and Core Web Vitals",
+      "Integrations, forms, and analytics",
+      "Post-launch support and iterations",
     ],
   },
   {
     number: "03",
-    navTitle: "Mobile apps",
-    title: "Native-feeling product UI",
-    description:
-      "iOS and Android interfaces that feel intentional — polished flows, consistent patterns, and details users notice.",
+    navTitle: "Illustrations",
+    title: "Custom art that fits your brand",
+    description: "Logo, icons, and illustrations drawn for your brand.",
     body: [
-      "Users notice when an app feels cheap. Buttons too small. Back navigation in the wrong place. A spinner that looks like the app froze.",
-      "We walk through the flows that actually get used. Sign up. The main action. Settings. The screens people see when something breaks.",
-      "iOS and Android each get UI that respects the platform. Not a website squeezed into a phone frame. Your dev team gets named screens, spacing specs, and a prototype they can tap through before writing the first line of code.",
+      "Stock art dates your brand fast. We draw characters, scenes, and icons that match your type, color, and tone — whether the site is serious or playful.",
+      "Illustrations are planned for where they live: hero, empty states, onboarding, social, and slide decks — exported in the formats your team actually uses.",
+      "Style guides keep new artwork on-brand when marketing asks for one more graphic next quarter.",
+    ],
+    imageSrc: "/img-10.png",
+    cardColor: "#e85a4a",
+    cardTextColor: "#ffffff",
+    points: [
+      "Brand and spot illustrations",
+      "Custom icon sets",
+      "Marketing and social assets",
+      "Onboarding and empty-state art",
+      "Character and scene development",
+      "Export for web, app, and print",
+    ],
+  },
+  {
+    number: "04",
+    navTitle: "Mobile App",
+    title: "iOS and Android apps that feel native",
+    description: "iOS and Android apps that feel at home on each platform.",
+    body: [
+      "We map the flows people repeat daily — sign up, core action, settings, recovery — before picking fonts. Platform guidelines matter; your app should feel at home on iOS and Android.",
+      "Design and build stay aligned: spacing, gestures, and empty states are specified the way mobile engineers need them, not as a website squeezed into a phone frame.",
+      "From MVP to v2, we help you ship features without every release looking like it came from a different product.",
     ],
     imageSrc: "/img-3.png",
     cardColor: "#f5cc24",
     cardTextColor: "#0a0a0a",
     points: [
-      "Core user flows & interaction design",
-      "iOS and Android UI patterns",
-      "Onboarding, settings & profile screens",
-      "Micro-interactions & state design",
-      "Prototype-ready screen sets",
-      "Design specs for engineering handoff",
-    ],
-  },
-  {
-    number: "04",
-    navTitle: "Ecommerce",
-    title: "Stores that feel premium and effortless",
-    description:
-      "Online shops where browsing feels good and checkout feels fast — without sacrificing brand or trust.",
-    body: [
-      "If a customer cannot pick a size, see the total, or find checkout in two taps, you lost the sale before ads could help.",
-      "We treat browse, product page, cart, and checkout as one continuous experience. Same type, same spacing rules, same voice from empty cart to order confirmation.",
-      "Mobile gets the extra pass. That is where most people shop and where most checkouts get abandoned halfway through.",
-    ],
-    imageSrc: "/img-8.png",
-    cardColor: "#e85a4a",
-    cardTextColor: "#ffffff",
-    points: [
-      "Storefront & collection page design",
-      "Product detail & variant selection UX",
-      "Cart, checkout & order confirmation",
-      "Trust signals & review placement",
-      "Mobile shopping experience",
-      "Brand-consistent visual language",
-    ],
-  },
-  {
-    number: "05",
-    navTitle: "SaaS",
-    title: "Dashboards and scalable design systems",
-    description:
-      "Complex product UI made clear — dashboards, settings, onboarding, and patterns that grow with your team.",
-    body: [
-      "Product teams ship fast. One new table this sprint, a settings redesign next month, a wizard nobody asked for in between. Pretty soon every screen looks like it came from a different app.",
-      "We design around the tasks people repeat daily. Log in. Do the work. Pull the report. Undo the mistake they made at 4pm.",
-      "Shared components for tables, filters, forms, and empty states keep new features from feeling like side quests. Devs get tokens and a short doc, not a graveyard of one off frames.",
-    ],
-    imageSrc: "/media-14.png",
-    cardColor: "#3ecfad",
-    cardTextColor: "#0a0a0a",
-    points: [
-      "Dashboard & analytics interface design",
-      "Onboarding, billing & settings flows",
-      "Tables, filters, forms & modals",
-      "Scalable component & token system",
-      "Admin panels & role-based views",
-      "Documentation for design-dev alignment",
-    ],
-  },
-  {
-    number: "06",
-    navTitle: "LMS",
-    title: "Learning platforms people stick with",
-    description:
-      "Course layouts, progress tracking, and interfaces that keep learners engaged instead of lost in menus.",
-    body: [
-      "Learning apps are used in fragments. Someone opens a lesson on Tuesday, forgets until Saturday, and opens the app feeling lost. That is fixable in the UI.",
-      "Modules stay short. Progress shows up without turning the dashboard into a video game. Instructors can see who stalled without digging through three admin panels.",
-      "We favor readable type and quiet layouts over decorative clutter. People are here to learn, not to admire the illustration budget.",
-    ],
-    imageSrc: "/img-7.png",
-    cardColor: "#9b87f5",
-    cardTextColor: "#ffffff",
-    points: [
-      "Course & lesson page structure",
-      "Progress tracking & enrollment UX",
-      "Quizzes, certificates & assessments",
-      "Instructor & admin dashboards",
-      "Content-heavy layouts done right",
-      "Accessible, readable typography systems",
+      "iOS and Android UI implementation",
+      "Cross-platform and native approaches",
+      "Onboarding and core user journeys",
+      "Push, deep links, and app settings",
+      "API-driven product screens",
+      "Store-ready builds and iterations",
     ],
   },
 ] as const;
@@ -436,7 +363,8 @@ export const caseStudiesSection = {
 export const caseStudies = [
   {
     tags: ["Fintech", "Product UI"],
-    title: "From data chaos to clarity",
+    titleLine1: "From data chaos",
+    titleLine2: "to clarity",
     quote:
       "Lurk structured our product from MVP to launch and helped us raise $4M with a cohesive brand system our users actually trust.",
     clientName: "Sarah Chen",
@@ -447,7 +375,8 @@ export const caseStudies = [
   },
   {
     tags: ["SaaS", "Design system"],
-    title: "From complexity to scale",
+    titleLine1: "From complexity",
+    titleLine2: "to scale",
     quote:
       "They joined from day one — research, product design, and brand from scratch — and delivered a system that kept up as our team doubled.",
     clientName: "Marcus Webb",
@@ -458,7 +387,8 @@ export const caseStudies = [
   },
   {
     tags: ["Climate tech", "Dashboard"],
-    title: "From data to daily action",
+    titleLine1: "From data",
+    titleLine2: "to daily action",
     quote:
       "Core flows and the visual layer were redesigned with care. Engagement on key actions improved as we grew to 50K daily users.",
     clientName: "Elena Ruiz",

@@ -1,5 +1,4 @@
 import { faq, faqSection } from "@/lib/content";
-import { tiltWarp } from "@/lib/fonts";
 import { Accordion } from "@/components/ui/Accordion";
 import { FaqQuestionBlockModel } from "@/components/ui/FaqQuestionBlockModel";
 import { Reveal } from "@/components/ui/Reveal";
@@ -17,9 +16,7 @@ export function FAQ() {
                 <SectionLabelChip className="mb-5 normal-case">
                   {faqSection.label}
                 </SectionLabelChip>
-                <h2
-                  className={`${tiltWarp.className} text-4xl leading-[1.05] tracking-tight md:text-5xl lg:text-[3.25rem]`}
-                >
+                <h2 className="font-[family-name:var(--font-dm-sans)] text-4xl font-medium leading-[1.05] tracking-tight md:text-5xl lg:text-[3.25rem]">
                   <span className="block text-foreground">
                     {faqSection.titleLine1}
                   </span>

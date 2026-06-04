@@ -7,6 +7,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { CtaSlideLabel } from "@/components/ui/CtaSlideLabel";
 import { DeviceMockup } from "@/components/ui/DeviceMockup";
 import { RotatingText } from "@/components/ui/RotatingText";
 import { brand, hero } from "@/lib/content";
@@ -121,10 +122,10 @@ export function Hero() {
           >
             <a
               href={hero.cta.href}
-              className="inline-flex h-12 shrink-0 items-center rounded-[43px] bg-hero-foreground px-10 font-[family-name:var(--font-inter)] text-lg font-semibold text-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground md:h-14 md:px-12 md:text-xl"
+              className="group inline-flex h-12 shrink-0 items-center overflow-hidden rounded-[43px] bg-hero-foreground px-10 font-[family-name:var(--font-inter)] text-lg font-semibold text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground md:h-14 md:px-12 md:text-xl"
               onClick={() => playPopSound()}
             >
-              {hero.cta.label}
+              <CtaSlideLabel label={hero.cta.label} />
             </a>
           </motion.div>
           </motion.div>

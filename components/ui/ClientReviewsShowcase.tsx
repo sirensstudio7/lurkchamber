@@ -6,7 +6,6 @@ import { ClientReviewCard } from "@/components/ui/ClientReviewCard";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabelChip } from "@/components/ui/SectionLabelChip";
 import { caseStudies, caseStudiesSection } from "@/lib/content";
-import { tiltWarp } from "@/lib/fonts";
 import { useHydrated } from "@/lib/use-hydrated";
 import "./client-reviews.css";
 
@@ -142,7 +141,7 @@ function ClientReviewsMobileCarousel() {
       aria-label="Client stories"
     >
       {caseStudies.map((study) => (
-        <ClientReviewCard key={study.title} {...study} />
+        <ClientReviewCard key={`${study.titleLine1}-${study.titleLine2}`} {...study} />
       ))}
     </div>
   );
@@ -155,7 +154,7 @@ function ClientReviewsDesktopRow() {
       aria-label="Client stories"
     >
       {caseStudies.map((study) => (
-        <ClientReviewCard key={study.title} {...study} />
+        <ClientReviewCard key={`${study.titleLine1}-${study.titleLine2}`} {...study} />
       ))}
     </div>
   );
@@ -177,9 +176,7 @@ export function ClientReviewsShowcase() {
               <SectionLabelChip className="mb-4">
                 {caseStudiesSection.label}
               </SectionLabelChip>
-              <h2
-                className={`${tiltWarp.className} text-4xl leading-tight tracking-tight md:text-5xl lg:text-6xl`}
-              >
+              <h2 className="font-[family-name:var(--font-dm-sans)] text-4xl font-medium leading-tight tracking-tight md:text-5xl lg:text-6xl">
                 {caseStudiesSection.title}
               </h2>
               <p className="mt-1.5 max-w-2xl text-[18px] leading-relaxed text-muted md:mt-2">
@@ -199,7 +196,7 @@ export function ClientReviewsShowcase() {
             aria-label="Client stories"
           >
             {caseStudies.map((study) => (
-              <ClientReviewCard key={study.title} {...study} />
+              <ClientReviewCard key={`${study.titleLine1}-${study.titleLine2}`} {...study} />
             ))}
           </div>
         ) : (

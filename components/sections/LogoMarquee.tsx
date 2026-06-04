@@ -21,51 +21,39 @@ function LogoTile({
   );
 }
 
-export function LogoMarquee() {
-  const marqueeItems = [...clients.logos, ...clients.logos];
-  const topRowLogos = clients.logos.slice(0, 5);
-  const bottomRowLogos = clients.logos.slice(5);
+function LogoMarqueeRow({ logos }: { logos: typeof clients.logos }) {
+  const marqueeItems = [...logos, ...logos];
 
   return (
+    <div className="logo-marquee__row overflow-x-clip">
+      <ul className="logo-marquee__track logo-marquee__track--infinite" aria-hidden>
+        {marqueeItems.map((logo, index) => (
+          <LogoTile key={`${logo.name}-${index}`} logo={logo} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export function LogoMarquee() {
+  return (
     <section
-      className="relative z-0 flex flex-col justify-center bg-background py-20 md:py-28"
+      className="logo-marquee-section relative z-10 flex flex-col justify-center bg-transparent py-20 md:py-28"
       aria-label="Client logos"
     >
-      <div className="container-wide flex w-full flex-col items-center justify-center">
-        <p className="mx-auto mb-10 max-w-2xl text-center text-[18px] leading-relaxed text-muted md:mb-12">
-          <span className="block">{clients.labelLine1}</span>
-          <span className="block">{clients.labelLine2}</span>
-        </p>
-
-        <div className="w-full overflow-hidden md:hidden">
-          <ul
-            className="logo-marquee__track logo-marquee__track--scroll animate-marquee"
-            aria-hidden
-          >
-            {marqueeItems.map((logo, index) => (
-              <LogoTile key={`${logo.name}-${index}`} logo={logo} />
-            ))}
-          </ul>
-          <ul className="sr-only">
-            {clients.logos.map((logo) => (
-              <li key={logo.name}>{logo.name}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="logo-marquee__desktop hidden w-full flex-col gap-3 md:flex md:gap-4">
-          <ul className="logo-marquee__track logo-marquee__track--row-5">
-            {topRowLogos.map((logo) => (
-              <LogoTile key={logo.name} logo={logo} />
-            ))}
-          </ul>
-          <ul className="logo-marquee__track logo-marquee__track--row-5">
-            {bottomRowLogos.map((logo) => (
-              <LogoTile key={logo.name} logo={logo} />
-            ))}
-          </ul>
-        </div>
+      <div className="logo-marquee__bleed w-full md:hidden">
+        <LogoMarqueeRow logos={clients.logos} />
       </div>
+
+      <div className="logo-marquee__bleed logo-marquee__desktop hidden w-full md:block">
+        <LogoMarqueeRow logos={clients.logos} />
+      </div>
+
+      <ul className="sr-only">
+        {clients.logos.map((logo) => (
+          <li key={logo.name}>{logo.name}</li>
+        ))}
+      </ul>
     </section>
   );
 }

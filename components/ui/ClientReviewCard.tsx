@@ -3,7 +3,8 @@ import "./client-reviews.css";
 
 type ClientReviewCardProps = {
   tags: readonly string[];
-  title: string;
+  titleLine1: string;
+  titleLine2: string;
   quote: string;
   clientName: string;
   role: string;
@@ -33,7 +34,8 @@ function CardMarkIcon() {
 
 export function ClientReviewCard({
   tags,
-  title,
+  titleLine1,
+  titleLine2,
   quote,
   clientName,
   role,
@@ -58,7 +60,10 @@ export function ClientReviewCard({
           </span>
         </div>
 
-        <h3 className="client-review-card__title">{title}</h3>
+        <h3 className="client-review-card__title">
+          <span className="client-review-card__title-line">{titleLine1}</span>
+          <span className="client-review-card__title-line">{titleLine2}</span>
+        </h3>
         <p className="client-review-card__quote">&ldquo;{quote}&rdquo;</p>
         <p className="client-review-card__client">
           <span>{clientName}</span>

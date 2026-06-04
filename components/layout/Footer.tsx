@@ -3,8 +3,8 @@
 import { EnvelopeIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { FaBehance, FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { LurkLogo } from "@/components/ui/LurkLogo";
 import { footer, site, socials } from "@/lib/content";
-import { tiltWarp } from "@/lib/fonts";
 import { scrollToHash } from "@/lib/lenis-scroll";
 import { playPopSound } from "@/lib/playPopSound";
 import { cn } from "@/lib/utils";
@@ -158,17 +158,18 @@ export function Footer() {
       <div className="container-wide">
         <div className="flex flex-col gap-6 md:flex-row md:gap-6">
         <div className="relative flex min-h-[280px] flex-col justify-between overflow-hidden rounded-3xl bg-gradient-to-br from-[#d45a24] to-[#a33d12] p-8 md:min-h-[320px] md:basis-[380px] md:shrink-0 md:grow-0 md:p-10 md:pr-8">
-          <div className="flex items-center gap-2.5">
-            <LurkMark className="h-[22px] w-[18px]" />
-            <span
-              className={cn(
-                tiltWarp.className,
-                "text-2xl leading-none tracking-[-0.12em] text-white",
-              )}
-            >
-              {site.logo.replace(".", "").toUpperCase()}
-            </span>
-          </div>
+          <a
+            href="#hero"
+            className="inline-flex shrink-0 items-center transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            aria-label="Lurk home"
+            onClick={(event) => {
+              event.preventDefault();
+              playPopSound();
+              scrollToHash("#hero");
+            }}
+          >
+            <LurkLogo className="h-6 w-auto text-white md:h-7" />
+          </a>
 
           <div>
             <p className="m-0 font-[family-name:var(--font-inter)] text-lg font-semibold leading-snug text-white">

@@ -2,7 +2,6 @@
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { aboutSection } from "@/lib/content";
 import { scheduleLayoutStable } from "@/lib/layout-stable";
@@ -102,19 +101,5 @@ export function About() {
 }
 
 function AboutToken({ token }: { token: AboutToken }) {
-  if (token.type === "icon") {
-    return (
-      <Image
-        src={token.src}
-        alt={token.alt}
-        width={52}
-        height={52}
-        unoptimized
-        className="about-section__icon about-section__reveal"
-        aria-hidden={token.alt === "" ? true : undefined}
-      />
-    );
-  }
-
   return <span className="about-section__word about-section__reveal">{token.text}</span>;
 }

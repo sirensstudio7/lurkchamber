@@ -1,44 +1,76 @@
-import Image from "next/image";
+import type { CSSProperties } from "react";
 import { services, servicesSection } from "@/lib/content";
-import { tiltWarp } from "@/lib/fonts";
 import { ValueStripLayoutSync } from "@/components/sections/ValueStripLayoutSync";
 import "./value-strip-services.css";
 
 type Service = (typeof services)[number];
 
-function ServiceStackCardContent({
+/** Tall left, wide top-right, two squares on row two */
+const BENTO_LAYOUT = [
+  "services-bento__card--tall-left",
+  "services-bento__card--wide-top",
+  "services-bento__card--sq-mid-a",
+  "services-bento__card--sq-mid-b",
+] as const;
+
+function ServiceBentoCard({
   service,
-  titleId,
+  layoutClass,
 }: {
   service: Service;
-  titleId: string;
+  layoutClass: (typeof BENTO_LAYOUT)[number];
 }) {
+  const titleId = `service-title-${service.number}`;
+  const cardBackgroundSrc =
+    "cardBackgroundSrc" in service ? service.cardBackgroundSrc : undefined;
+  const cardSurfaceBg =
+    "cardSurfaceBg" in service ? service.cardSurfaceBg : undefined;
+  const cardSurfaceFg =
+    "cardSurfaceFg" in service ? service.cardSurfaceFg : undefined;
+
+  const surfaceClassName = cardBackgroundSrc
+    ? "services-bento__card-surface services-bento__card-surface--image"
+    : cardSurfaceBg
+      ? "services-bento__card-surface services-bento__card-surface--accent"
+      : "services-bento__card-surface";
+
+  const surfaceStyle: CSSProperties | undefined = cardBackgroundSrc
+    ? { "--service-card-image": `url(${cardBackgroundSrc})` }
+    : cardSurfaceBg
+      ? {
+          "--service-card-surface-bg": cardSurfaceBg,
+          ...(cardSurfaceFg
+            ? { "--service-card-surface-fg": cardSurfaceFg }
+            : {}),
+        }
+      : undefined;
+
   return (
-    <>
-      <div className="services-panel__stack-card-copy">
-        <h3
-          id={titleId}
-          className={`services-panel__stack-card-title ${tiltWarp.className}`}
-        >
-          {service.navTitle}
-        </h3>
-        <p className="services-panel__stack-card-lead">{service.description}</p>
-      </div>
-      <div className="services-panel__stack-card-media">
-        <div className="services-panel__stack-card-media-frame">
-          <div className="services-panel__stack-card-media-inner">
-            <Image
-              src={service.imageSrc}
-              alt=""
-              fill
-              unoptimized
-              className="object-cover object-center"
-              sizes="(max-width: 1023px) 100vw, 50vw"
-            />
+    <article
+      id={`service-panel-${service.number}`}
+      className={`services-bento__card ${layoutClass}`}
+      aria-labelledby={titleId}
+    >
+      <div className={surfaceClassName} style={surfaceStyle}>
+        {cardBackgroundSrc ? (
+          <div className="services-bento__card-scrim" aria-hidden />
+        ) : null}
+        <div className="services-bento__card-copy">
+          <div
+            className={
+              cardBackgroundSrc
+                ? "services-bento__card-text services-bento__card-text--overlay"
+                : "services-bento__card-text"
+            }
+          >
+            <h3 id={titleId} className="services-bento__card-title">
+              {service.navTitle}
+            </h3>
+            <p className="services-bento__card-lead">{service.description}</p>
           </div>
         </div>
       </div>
-    </>
+    </article>
   );
 }
 
@@ -53,7 +85,7 @@ export function ValueStripServices() {
       <div className="container-wide services-panel__inner">
         <div className="services-panel__layout">
           <header className="services-panel__header">
-            <h2 className={`services-panel__title ${tiltWarp.className}`}>
+            <h2 className="services-panel__title">
               <span className="services-panel__title-line">
                 {servicesSection.titleLine1}
               </span>
@@ -61,22 +93,23 @@ export function ValueStripServices() {
                 {servicesSection.titleLine2}
               </span>
             </h2>
+            <p className="services-panel__subtitle">
+              <span className="services-panel__subtitle-line">
+                {servicesSection.subtitleLine1}
+              </span>
+              <span className="services-panel__subtitle-line">
+                {servicesSection.subtitleLine2}
+              </span>
+            </p>
           </header>
 
-          <div className="services-panel__stack">
-            {services.map((service) => (
-              <article
+          <div className="services-bento">
+            {services.map((service, index) => (
+              <ServiceBentoCard
                 key={service.number}
-                id={`service-panel-${service.number}`}
-                className="services-panel__stack-card"
-              >
-                <div className="services-panel__stack-card-surface">
-                  <ServiceStackCardContent
-                    service={service}
-                    titleId={`service-title-${service.number}`}
-                  />
-                </div>
-              </article>
+                service={service}
+                layoutClass={BENTO_LAYOUT[index] ?? "services-bento__card--wide-a"}
+              />
             ))}
           </div>
         </div>

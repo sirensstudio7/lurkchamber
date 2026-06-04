@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { header, mobileNav } from "@/lib/content";
+import { CtaSlideLabel } from "@/components/ui/CtaSlideLabel";
 import { LurkLogo } from "@/components/ui/LurkLogo";
 import { getAppScrollY, onAppScroll, scrollToHash } from "@/lib/lenis-scroll";
 import { playNavPopSound, preloadNavPopSound } from "@/lib/playPopSound";
@@ -132,8 +133,10 @@ export function Header() {
           className={cn(
             "flex w-full min-w-0 max-w-full items-center justify-between gap-2 overflow-hidden rounded-[55px] px-4 py-1.5 md:w-auto md:max-w-3xl md:justify-start md:gap-4 md:px-4 md:py-2",
             NAV_THEME_TRANSITION,
-            "h-[60px] md:h-[68px]",
-            pastHero ? "bg-hero-bg" : "bg-background",
+            "h-[60px] md:h-[68px] border-2",
+            pastHero
+              ? "border-transparent bg-hero-foreground"
+              : "border-transparent bg-background",
           )}
         >
           <a
@@ -141,7 +144,7 @@ export function Header() {
             className={cn(
               "flex shrink-0 cursor-pointer items-center px-1.5 py-0.5 transition-[color,opacity] duration-500 ease-in-out hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:duration-150",
               pastHero
-                ? "focus-visible:outline-white"
+                ? "focus-visible:outline-foreground"
                 : "focus-visible:outline-nav-accent",
             )}
             aria-label="Lurk home"
@@ -150,7 +153,7 @@ export function Header() {
             <LurkLogo
               className={cn(
                 NAV_THEME_TRANSITION,
-                pastHero ? "text-white" : "text-black",
+                pastHero ? "text-hero-bg" : "text-black",
               )}
             />
           </a>
@@ -169,8 +172,8 @@ export function Header() {
                     NAV_THEME_TRANSITION,
                     pastHero
                       ? item.highlight
-                        ? "font-extrabold text-hero-foreground"
-                        : "font-semibold text-white hover:text-white/80"
+                        ? "font-extrabold text-hero-bg hover:text-hero-bg/80"
+                        : "font-semibold text-foreground hover:text-foreground/80"
                       : item.highlight
                         ? "font-extrabold text-hero-bg hover:text-hero-bg/80"
                         : "font-semibold text-nav-text hover:text-nav-accent",
@@ -186,15 +189,15 @@ export function Header() {
           <a
             href={header.cta.href}
             className={cn(
-              "ml-auto hidden shrink-0 rounded-[43px] px-5 py-2.5 font-[family-name:var(--font-inter)] text-base font-semibold hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 md:inline-flex",
+              "group ml-auto hidden shrink-0 overflow-hidden rounded-[43px] px-5 py-2.5 font-[family-name:var(--font-inter)] text-base font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 md:inline-flex",
               NAV_THEME_TRANSITION,
               pastHero
-                ? "bg-hero-foreground text-foreground focus-visible:outline-hero-foreground"
+                ? "bg-hero-bg text-white focus-visible:outline-hero-bg"
                 : "bg-black text-white focus-visible:outline-black",
             )}
             onClick={(event) => handleSectionLink(event, header.cta.href)}
           >
-            {header.cta.label}
+            <CtaSlideLabel label={header.cta.label} />
           </a>
 
           <button
@@ -203,7 +206,7 @@ export function Header() {
               "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full md:hidden",
               NAV_THEME_TRANSITION,
               pastHero
-                ? "text-white hover:bg-white/10"
+                ? "text-foreground hover:bg-black/5"
                 : "text-nav-text hover:bg-black/5",
             )}
             aria-expanded={menuOpen}
@@ -249,15 +252,15 @@ export function Header() {
           <a
             href={header.cta.href}
             className={cn(
-              "mt-2 rounded-[43px] px-5 py-3 text-center font-[family-name:var(--font-inter)] text-base font-semibold",
+              "group mt-2 overflow-hidden rounded-[43px] px-5 py-3 text-center font-[family-name:var(--font-inter)] text-base font-semibold",
               NAV_THEME_TRANSITION,
               pastHero
-                ? "bg-hero-foreground text-foreground"
+                ? "bg-hero-bg text-white"
                 : "bg-black text-white",
             )}
             onClick={(event) => handleSectionLink(event, header.cta.href)}
           >
-            {header.cta.label}
+            <CtaSlideLabel label={header.cta.label} />
           </a>
         </nav>
       </div>

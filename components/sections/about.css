@@ -17,14 +17,16 @@
 .about-section__copy {
   width: 100%;
   max-width: min(56rem, 100%);
+  margin-inline: auto;
   color: var(--foreground);
-  text-align: left;
+  text-align: center;
 }
 
 .about-section__paragraph {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   margin: 0 0 3.125rem;
   font-size: clamp(2.25rem, 5vw, 3.75rem);
@@ -37,30 +39,17 @@
   margin-bottom: 0;
 }
 
-.about-section__word,
-.about-section__icon {
+.about-section__word {
+  display: inline-block;
+  white-space: pre-wrap;
   opacity: 0;
   transform: scale(0.72);
   transform-origin: 50% 85%;
   will-change: opacity, transform;
 }
 
-.about-section__word {
-  display: inline-block;
-  white-space: pre-wrap;
-}
-
-.about-section__icon {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  vertical-align: middle;
-  object-fit: contain;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .about-section__word,
-  .about-section__icon {
+  .about-section__word {
     opacity: 1;
     transform: none;
     will-change: auto;
