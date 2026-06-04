@@ -157,7 +157,6 @@ export function Features() {
     )
       return;
 
-    const mobile = isMobileViewport();
     let cachedHorizontalEndX: number | null = null;
     let cachedZoomDistance: number | null = null;
     let cachedZoomFrom: {
@@ -273,9 +272,9 @@ export function Features() {
         end: () => `+=${getHorizontalDistance() + getZoomDistance()}`,
         pin: true,
         pinType: "transform",
-        scrub: mobile ? 0.35 : 0.65,
+        scrub: 0.65,
         invalidateOnRefresh: true,
-        anticipatePin: mobile ? 1 : 0,
+        anticipatePin: 0,
         onEnter: resetFeaturesScrollState,
         onLeaveBack: resetFeaturesScrollState,
         onRefresh() {
@@ -347,11 +346,6 @@ export function Features() {
       cachedZoomFrom = null;
       measureHorizontalEndX();
 
-      if (mobile && !force) {
-        updateScrollTriggers();
-        return;
-      }
-
       if (!force && !isBeforeFeatures()) {
         updateScrollTriggers();
         return;
@@ -367,7 +361,7 @@ export function Features() {
       }
       layoutRefreshTimer = window.setTimeout(() => {
         layoutRefreshTimer = undefined;
-        if (mobile) {
+        if (isMobileViewport()) {
           refresh(force);
           return;
         }
@@ -400,9 +394,7 @@ export function Features() {
     const precedingSections = getPrecedingSections();
     let lastPrecedingHeight = measurePrecedingHeight(precedingSections);
     const sectionResizeObserver =
-      !mobile &&
-      typeof ResizeObserver !== "undefined" &&
-      precedingSections.length > 0
+      typeof ResizeObserver !== "undefined" && precedingSections.length > 0
         ? new ResizeObserver(() => {
             const height = measurePrecedingHeight(precedingSections);
             if (Math.abs(height - lastPrecedingHeight) < 8) return;
@@ -484,7 +476,7 @@ export function Features() {
       >
         <div
           ref={pinWrapRef}
-          className="flex h-full w-max items-center gap-4 pr-8 max-md:[will-change:auto] md:will-change-transform"
+          className="flex h-full w-max items-center gap-4 pr-8 will-change-transform"
         >
           <div className="box-border flex min-h-full w-[88vw] max-w-[88vw] min-w-0 shrink-0 flex-col justify-center px-[max(1.25rem,5vw)] md:w-auto md:max-w-none md:min-w-[min(70vw,640px)]">
             <SectionLabelChip className="mb-4">{featuresSection.label}</SectionLabelChip>

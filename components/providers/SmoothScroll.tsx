@@ -51,9 +51,6 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
     if (prefersReducedMotion) {
       setLenisInstance(null);
-      ScrollTrigger.scrollerProxy(document.documentElement, {});
-      ScrollTrigger.defaults({ scroller: document.documentElement });
-
       const onScroll = () => {
         setAppScrollY(window.scrollY);
         ScrollTrigger.update();
@@ -61,26 +58,17 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       };
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
-
       return () => {
         mobileMq.removeEventListener("change", onViewportModeChange);
         window.removeEventListener("scroll", onScroll);
-        ScrollTrigger.scrollerProxy(document.documentElement, {});
-        ScrollTrigger.defaults({ scroller: window });
         setLenisInstance(null);
       };
     }
 
-    const mobile = isMobileViewport();
-
     const lenis = new Lenis({
-      duration: mobile ? 1.05 : 1.2,
-      lerp: mobile ? 0.12 : 0.1,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: !mobile,
-      syncTouch: mobile,
-      syncTouchLerp: mobile ? 0.1 : undefined,
-      touchInertiaExponent: mobile ? 1.5 : undefined,
+      smoothWheel: true,
       allowNestedScroll: true,
     });
     setLenisInstance(lenis);
