@@ -31,7 +31,7 @@ export const hero = {
   ],
   subline:
     "We help you build SaaS that feel like our own personal projects.",
-  cta: { label: "Let's talk!", href: "#contact" },
+  cta: { label: "Let's talk!", href: "https://cal.com/lurkchamber" },
   secondaryCta: { label: "See our work", href: "#stories" },
   mockupNotification: {
     title: "Project delivered",

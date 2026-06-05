@@ -122,6 +122,8 @@ export function Hero() {
           >
             <a
               href={hero.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex h-16 shrink-0 items-center overflow-hidden rounded-[43px] bg-hero-foreground px-14 font-[family-name:var(--font-inter)] text-lg font-semibold text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-foreground md:h-14 md:px-12 md:text-xl"
               onClick={() => playPopSound()}
             >
