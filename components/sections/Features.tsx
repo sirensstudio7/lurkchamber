@@ -253,10 +253,15 @@ export function Features() {
       return cachedHorizontalEndX;
     };
 
-    const getHorizontalDistance = () => Math.abs(getHorizontalEndX());
+    // Scroll farther vertically than horizontal pixels so sideways scrub matches
+    // normal vertical pace. Mobile needs a higher factor: syncTouch tracks the
+    // finger tightly inside the pin while Lenis smooths the rest of the page.
+    const horizontalScrollMultiplier = mobile ? 2.25 : 1.3;
+    const getHorizontalScrollDistance = () =>
+      Math.abs(getHorizontalEndX()) * horizontalScrollMultiplier;
     const getZoomDistance = () => {
       if (cachedZoomDistance === null) {
-        cachedZoomDistance = getViewportHeight() * 0.85;
+        cachedZoomDistance = getViewportHeight() * (mobile ? 0.95 : 0.85);
       }
       return cachedZoomDistance;
     };
@@ -313,10 +318,10 @@ export function Features() {
         trigger: pinSection,
         scroller: document.documentElement,
         start: "top top",
-        end: () => `+=${getHorizontalDistance() + getZoomDistance()}`,
+        end: () => `+=${getHorizontalScrollDistance() + getZoomDistance()}`,
         pin: true,
         pinType: "transform",
-        scrub: 0.65,
+        scrub: mobile ? 1.15 : 0.65,
         invalidateOnRefresh: true,
         anticipatePin: 0,
         onEnter: resetFeaturesScrollState,
@@ -326,17 +331,19 @@ export function Features() {
           measureHorizontalEndX();
         },
         onUpdate(self) {
-          const horizontal = getHorizontalDistance();
+          const horizontalScroll = getHorizontalScrollDistance();
           const zoom = getZoomDistance();
-          const total = horizontal + zoom;
-          const hEnd = total > 0 ? horizontal / total : 0;
+          const total = horizontalScroll + zoom;
+          const hEnd = total > 0 ? horizontalScroll / total : 0;
           const progress = self.progress;
           const sectionW = pinSection.offsetWidth;
           const sectionH = pinSection.offsetHeight;
 
           if (progress < hEnd) {
             const hProgress = hEnd > 0 ? progress / hEnd : 0;
-            const easedH = gsap.parseEase("power2.out")(hProgress);
+            const easedH = mobile
+              ? hProgress
+              : gsap.parseEase("power2.inOut")(hProgress);
             setPinWrapX(getHorizontalEndX() * easedH);
             gsap.set(expandContainer, { opacity: 0, pointerEvents: "none" });
             gsap.set(expandPanel, { opacity: 0 });
