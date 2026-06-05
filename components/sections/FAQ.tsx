@@ -16,15 +16,15 @@ export function FAQ() {
                 <SectionLabelChip className="mb-5 normal-case">
                   {faqSection.label}
                 </SectionLabelChip>
-                <h2 className="font-[family-name:var(--font-dm-sans)] text-4xl font-medium leading-[1.05] tracking-tight md:text-5xl lg:text-[3.25rem]">
-                  <span className="block text-foreground">
+                <h2 className="font-[family-name:var(--font-dm-sans)] text-[1.875rem] font-medium leading-[1.05] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+                  <span className="block text-foreground max-md:whitespace-nowrap">
                     {faqSection.titleLine1}
                   </span>
                   <span className="block text-foreground">
                     {faqSection.titleLine2}
                   </span>
                 </h2>
-                <p className="mt-5 text-base leading-relaxed text-muted md:mt-6">
+                <p className="mt-2 text-[18px] leading-relaxed text-muted">
                   {faqSection.intro}
                 </p>
               </Reveal>

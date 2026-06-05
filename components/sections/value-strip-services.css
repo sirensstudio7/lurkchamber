@@ -217,7 +217,7 @@
 @media (min-width: 1024px) {
   .services-bento {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: minmax(13.5rem, 1fr) minmax(12.5rem, 1fr);
+    grid-template-rows: minmax(18rem, 1fr) minmax(17rem, 1fr);
     grid-template-areas:
       "tall-left wide-top wide-top"
       "tall-left sq-mid-a sq-mid-b";

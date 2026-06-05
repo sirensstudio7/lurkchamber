@@ -41,7 +41,7 @@ const FEATURES_CARD_TITLE_CLASS =
 function FeaturesSectionTitle() {
   return (
     <h2
-      className={`${FEATURES_HEADING_CLASS} w-full max-w-full text-[clamp(2.4rem,11.25vw,3.15rem)] leading-[1.1] tracking-[-0.02em] md:max-w-xl md:text-[clamp(2.5rem,6vw,4.5rem)] md:leading-[1.05]`}
+      className={`${FEATURES_HEADING_CLASS} w-full max-w-full text-[clamp(2.4rem,11.25vw,3.15rem)] leading-none tracking-[-0.02em] md:max-w-xl md:text-[clamp(2.5rem,6vw,4.5rem)]`}
     >
       <span className="block md:hidden">{featuresSection.titleMobileLine1}</span>
       <span className="block md:hidden">{featuresSection.titleMobileLine2}</span>

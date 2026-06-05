@@ -48,6 +48,12 @@
   will-change: opacity, transform;
 }
 
+@media (max-width: 767px) {
+  .about-section__paragraph {
+    font-size: clamp(1.875rem, 5.5vw, 2.125rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .about-section__word {
     opacity: 1;

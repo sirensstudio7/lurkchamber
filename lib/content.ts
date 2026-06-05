@@ -400,10 +400,11 @@ export const caseStudies = [
 ] as const;
 
 export const faqSection = {
-  label: "Frequently asked questions",
-  titleLine1: "Frequently asked",
-  titleLine2: "questions",
-  intro: "Everything you need to know before getting started.",
+  label: "FAQ",
+  titleLine1: "Common Questions",
+  titleLine2: "Clear Answers",
+  intro:
+    "Everything you need to know to make informed decisions with confidence.",
 } as const;
 
 export const faq = [
